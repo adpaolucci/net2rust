@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.9.0.schema.json
+
+PackageIdentifier: adpaolucci.net2rust
+PackageVersion: 0.1.0
+PackageLocale: en-US
+Publisher: adpaolucci
+PublisherUrl: https://github.com/adpaolucci
+PublisherSupportUrl: https://github.com/adpaolucci/net2rust/issues
+PackageName: Net2Rust
+PackageUrl: https://net2rust.guap.ca
+License: Apache-2.0
+LicenseUrl: https://github.com/adpaolucci/net2rust/blob/main/LICENSE
+Copyright: Copyright (c) 2026 adpaolucci
+ShortDescription: 55 pure-Rust network diagnostics, NDIS ETW capture, LAN, OSINT, and Wi-Fi/BLE tools with native Win32/Iced GUIs, CLI, and MCP server.
+Description: >-
+  net2rust is a pure-Rust, credential-free network diagnostics and telemetry workstation covering
+  55 tools across sockets/ETW, packet capture, LAN discovery, OSINT/WHOIS/DNS, and Wi-Fi/BLE
+  with a native zero-GPU Win32 desktop console (net2rust-win32 via WinSafe), a cross-platform
+  Iced GUI (net2rust-iced), a unified CLI, SHA-256/512 Merkle custody exports, and a policy-gated
+  JSON-RPC 2.0 stdio MCP server (net2rust-mcp).
+Moniker: net2rust
+Tags:
+  - network
+  - etw
+  - packet-capture
+  - wifi
+  - bluetooth
+  - osint
+  - win32
+  - rust
+  - cli
+  - gui
+  - mcp
+ReleaseNotesUrl: https://github.com/adpaolucci/net2rust/releases/tag/v0.1.0
+Documentations:
+  - DocumentLabel: Project Hub & Documentation
+    DocumentUrl: https://net2rust.guap.ca
+ManifestType: defaultLocale
+ManifestVersion: 1.9.0

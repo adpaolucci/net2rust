@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "net2rust": {
+      "command": "net2rust-mcp",
+      "args": [],
+      "env": {
+        "RUST_LOG": "warn"
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.9.0.schema.json
+
+PackageIdentifier: adpaolucci.net2rust
+PackageVersion: 0.1.0
+InstallerType: zip
+NestedInstallerType: portable
+NestedInstallerFiles:
+  - RelativeFilePath: net2rust.exe
+    PortableCommandAlias: net2rust
+  - RelativeFilePath: net2rust-win32.exe
+    PortableCommandAlias: net2rust-win32
+  - RelativeFilePath: net2rust-iced.exe
+    PortableCommandAlias: net2rust-iced
+  - RelativeFilePath: net2rust-mcp.exe
+    PortableCommandAlias: net2rust-mcp
+ReleaseDate: 2026-11-23
+Installers:
+  - Architecture: x64
+    InstallerUrl: https://github.com/adpaolucci/net2rust/releases/download/v0.1.0/net2rust-x86_64-pc-windows-msvc.zip
+    InstallerSha256: 0000000000000000000000000000000000000000000000000000000000000000
+ManifestType: installer
+ManifestVersion: 1.9.0

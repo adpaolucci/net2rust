@@ -1,0 +1,37 @@
+[package]
+name = "net2rust-radio"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "10 Wi-Fi BSS/profile and Bluetooth Classic/BLE tools for net2rust (R4 zero plaintext key extraction)"
+
+[dependencies]
+net2rust-core.workspace = true
+guap-table.workspace = true
+guap-mcp.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+roxmltree.workspace = true
+tokio.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+windows = { workspace = true, features = [
+    "Win32_Foundation",
+    "Win32_NetworkManagement_WiFi",
+    "Win32_NetworkManagement_Ndis",
+    "Win32_Devices_Bluetooth",
+    "Win32_System_Com",
+    "Win32_System_WinRT",
+    "Foundation",
+    "Foundation_Collections",
+    "Devices_Bluetooth",
+    "Devices_Bluetooth_Advertisement",
+    "Storage_Streams",
+] }

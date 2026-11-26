@@ -1,0 +1,39 @@
+[package]
+name = "net2rust-osint"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "10 WHOIS/RDAP, offline GeoIP/OUI, DNS, hosting, and DNS/network profile tools for net2rust"
+
+[dependencies]
+net2rust-core.workspace = true
+guap-table.workspace = true
+guap-mcp.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+tokio.workspace = true
+ureq.workspace = true
+rusqlite.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+winreg.workspace = true
+windows = { workspace = true, features = [
+    "Win32_Foundation",
+    "Win32_NetworkManagement_Dns",
+    "Win32_NetworkManagement_IpHelper",
+    "Win32_NetworkManagement_Ndis",
+    "Win32_Networking_WinSock",
+    "Win32_Networking_WinHttp",
+    "Win32_Networking_NetworkListManager",
+    "Win32_System_Com",
+    "Win32_System_Ole",
+    "Win32_System_Variant",
+    "Win32_System_Registry",
+] }

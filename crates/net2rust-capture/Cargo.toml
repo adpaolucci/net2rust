@@ -1,0 +1,33 @@
+[package]
+name = "net2rust-capture"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "11 NDIS ETW, optional Npcap, and offline PCAP/PCAPNG/ETL protocol analyzers for net2rust (R4 credential-free)"
+
+[dependencies]
+net2rust-core.workspace = true
+guap-table.workspace = true
+guap-mcp.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+chrono.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+libloading.workspace = true
+tokio.workspace = true
+byteorder.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+windows = { workspace = true, features = [
+    "Win32_Foundation",
+    "Win32_System_Diagnostics_Etw",
+    "Win32_System_Time",
+    "Win32_System_LibraryLoader",
+    "Win32_System_Threading",
+    "Win32_Security",
+] }

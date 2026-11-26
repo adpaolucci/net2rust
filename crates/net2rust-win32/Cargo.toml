@@ -1,0 +1,35 @@
+[package]
+name = "net2rust-win32"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Native Win32 GUI console for net2rust via guap-gui-win32 and WinSafe"
+
+[[bin]]
+name = "net2rust-win32"
+path = "src/main.rs"
+
+[dependencies]
+net2rust-core.workspace = true
+net2rust-sockets.workspace = true
+net2rust-capture.workspace = true
+net2rust-lan.workspace = true
+net2rust-osint.workspace = true
+net2rust-radio.workspace = true
+guap-table.workspace = true
+guap-mcp.workspace = true
+guap-gui-win32.workspace = true
+anyhow.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+winsafe.workspace = true
+windows = { workspace = true, features = ["Win32_Foundation", "Win32_Graphics_Dwm", "Win32_UI_Controls"] }
+arboard.workspace = true
+
+[target.'cfg(windows)'.build-dependencies]
+embed-resource.workspace = true

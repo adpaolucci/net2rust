@@ -1,0 +1,134 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/net2rust-core",
+    "crates/net2rust-sockets",
+    "crates/net2rust-capture",
+    "crates/net2rust-lan",
+    "crates/net2rust-osint",
+    "crates/net2rust-radio",
+    "crates/net2rust-report",
+    "crates/net2rust-mcp",
+    "crates/net2rust-cli",
+    "crates/net2rust-win32",
+    "crates/net2rust-iced",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+license = "Apache-2.0"
+repository = "https://github.com/adpaolucci/net2rust"
+homepage = "https://net2rust.guap.ca"
+documentation = "https://net2rust.guap.ca"
+authors = ["Net2Rust Contributors"]
+description = "55 pure-Rust Windows & cross-platform network diagnostics, ETW capture, LAN, OSINT, and Wi-Fi/BLE tools with dual Win32/Iced GUIs, CLI, and policy-gated MCP server"
+keywords = ["network", "etw", "windows", "gui", "mcp"]
+categories = ["command-line-utilities", "network-programming", "gui"]
+
+[workspace.dependencies]
+# Internal workspace crates
+net2rust-core = { path = "crates/net2rust-core" }
+net2rust-sockets = { path = "crates/net2rust-sockets" }
+net2rust-capture = { path = "crates/net2rust-capture" }
+net2rust-lan = { path = "crates/net2rust-lan" }
+net2rust-osint = { path = "crates/net2rust-osint" }
+net2rust-radio = { path = "crates/net2rust-radio" }
+net2rust-report = { path = "crates/net2rust-report" }
+net2rust-mcp = { path = "crates/net2rust-mcp" }
+
+# Shared GUAP Phase 0 foundation crates (sibling workspace ../guap-kit)
+guap-table = { path = "../guap-kit/crates/guap-table" }
+guap-export = { path = "../guap-kit/crates/guap-export" }
+guap-gui-win32 = { path = "../guap-kit/crates/guap-gui-win32" }
+guap-gui-iced = { path = "../guap-kit/crates/guap-gui-iced" }
+guap-mcp = { path = "../guap-kit/crates/guap-mcp" }
+
+# Core & shared crates (offline-verified against local Cargo cache)
+anyhow = "1.0"
+thiserror = "2.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+regex = "1.13"
+sha2 = "0.11"
+crc32fast = "1.5"
+csv = "1.4"
+dirs = "7.0"
+tempfile = "3.27"
+walkdir = "2.5"
+clap = { version = "4.6", features = ["derive"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+ctrlc = "3.5"
+tokio = { version = "1.54", features = ["rt", "rt-multi-thread", "sync", "time", "io-util", "io-std", "fs"] }
+libloading = "0.8"
+winreg = "0.56"
+roxmltree = "0.20"
+quick-xml = "0.41"
+url = "2.5"
+base64 = "0.22"
+hex = "0.4"
+bytes = "1.12"
+parking_lot = "0.12"
+fastrand = "2.5"
+byteorder = "1.5"
+bitflags = "2.13"
+once_cell = "1.21"
+ureq = { version = "2.12", default-features = false, features = ["native-tls", "gzip"] }
+rusqlite = { version = "0.34", features = ["bundled"] }
+embed-resource = "3.0"
+winsafe = { version = "0.0.29", features = ["gui", "shell"] }
+iced = { version = "0.14", features = ["wgpu", "tiny-skia", "tokio"] }
+rfd = "0.18"
+arboard = "3.7"
+windows = { version = "0.62", features = [
+    "Win32_Foundation",
+    "Win32_NetworkManagement_IpHelper",
+    "Win32_NetworkManagement_Ndis",
+    "Win32_NetworkManagement_Dns",
+    "Win32_NetworkManagement_NetManagement",
+    "Win32_NetworkManagement_WNet",
+    "Win32_NetworkManagement_WiFi",
+    "Win32_Networking_WinSock",
+    "Win32_Networking_WinHttp",
+    "Win32_Networking_NetworkListManager",
+    "Win32_System_Diagnostics_Etw",
+    "Win32_System_Time",
+    "Win32_System_LibraryLoader",
+    "Win32_System_Threading",
+    "Win32_System_ProcessStatus",
+    "Win32_System_Registry",
+    "Win32_System_IO",
+    "Win32_System_Com",
+    "Win32_System_Ole",
+    "Win32_System_Variant",
+    "Win32_System_WinRT",
+    "Win32_Storage_FileSystem",
+    "Win32_Security",
+    "Win32_Devices_Bluetooth",
+    "Win32_Graphics_Dwm",
+    "Win32_UI_Controls",
+    "Foundation",
+    "Foundation_Collections",
+    "Devices_Bluetooth",
+    "Devices_Bluetooth_Advertisement",
+    "Storage_Streams",
+] }
+
+[profile.dev.package.clap]
+opt-level = 2
+
+[profile.dev.package.clap_builder]
+opt-level = 2
+
+[profile.dev.package.clap_derive]
+opt-level = 2
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+panic = "abort"
+strip = true

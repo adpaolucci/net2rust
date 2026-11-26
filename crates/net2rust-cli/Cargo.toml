@@ -1,0 +1,32 @@
+[package]
+name = "net2rust-cli"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Unified CLI binary for net2rust"
+
+[[bin]]
+name = "net2rust"
+path = "src/main.rs"
+
+[dependencies]
+net2rust-core.workspace = true
+net2rust-sockets.workspace = true
+net2rust-capture.workspace = true
+net2rust-lan.workspace = true
+net2rust-osint.workspace = true
+net2rust-radio.workspace = true
+net2rust-report.workspace = true
+guap-table.workspace = true
+guap-export.workspace = true
+guap-mcp.workspace = true
+anyhow.workspace = true
+clap.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+dirs.workspace = true
+ctrlc.workspace = true
