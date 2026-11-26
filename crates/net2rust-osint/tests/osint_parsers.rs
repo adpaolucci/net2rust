@@ -330,7 +330,7 @@ fn test_domain_whois_multi_tld_chasing_and_whoiscl_isolation() {
     assert_eq!(jp.created_date, "2005/04/01");
     assert_eq!(jp.expiry_date, "2026/04/30");
 
-    // Batch WhoisCL error isolation
+    // Batch WHOIS error isolation
     let geoip = OfflineIpDb::embedded();
     let batch = run_whoiscl_batch(
         &[

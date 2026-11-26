@@ -6,7 +6,7 @@ use guap_mcp::{JsonRpcError, McpServerRegistry, PolicyMode};
 use guap_table::{SortDirection, TableProvider, TableQuery};
 use net2rust_core::{DomainCrateExport, MacAddr, NetContext, NetError, OfflineConfig, ToolCategory};
 use net2rust_lan::netbios::{build_nbstat_query, encode_netbios_name, query_nbstat_udp_socket};
-use net2rust_lan::speedtest::DownTesterProvider;
+use net2rust_lan::speedtest::SpeedtestProvider;
 use net2rust_lan::wol::build_magic_packet;
 use net2rust_lan::{LanDomain, actions, providers, tool_descriptors};
 use serde_json::json;
@@ -329,7 +329,7 @@ fn test_action_parameter_validation_errors() {
 
 #[test]
 fn test_loopback_speedtest_and_nbstat_integration() {
-    // 1) DownTesterProvider -> real ureq vs 127.0.0.1:0 TcpListener
+    // 1) SpeedtestProvider -> real ureq vs 127.0.0.1:0 TcpListener
     let listener = TcpListener::bind("127.0.0.1:0").unwrap();
     let port = listener.local_addr().unwrap().port();
     let payload_len = 256 * 1024usize;
@@ -346,7 +346,7 @@ fn test_loopback_speedtest_and_nbstat_integration() {
     });
 
     let url = format!("http://127.0.0.1:{port}/bench.bin");
-    let speed = DownTesterProvider::new(NetContext::live()).with_urls(vec![url]);
+    let speed = SpeedtestProvider::new(NetContext::live()).with_urls(vec![url]);
     let data = speed.query(&TableQuery::default()).unwrap();
     t.join().unwrap();
     assert_eq!(data.total_rows, 1);

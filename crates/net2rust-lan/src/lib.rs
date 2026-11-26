@@ -20,14 +20,14 @@ use guap_mcp::ActionCommand;
 use guap_table::TableProvider;
 use net2rust_core::{DomainCrateExport, NetContext, ToolCategory, ToolDescriptor};
 
-use crate::netbios::NetBScannerProvider;
-use crate::ping::PingInfoViewProvider;
-use crate::resolve::FastResolverProvider;
-use crate::scan::{LanIpScannerProvider, NetworkConnectLogProvider, WirelessNetWatcherProvider};
-use crate::smb::{NetResViewProvider, NetworkOpenedFilesProvider, OpenFilesCloseAction};
-use crate::speedtest::DownTesterProvider;
-use crate::trace::CountryTraceRouteProvider;
-use crate::wol::{WakeMeOnLanProvider, WolSendAction};
+use crate::netbios::NetBiosScannerProvider;
+use crate::ping::PingMonitorProvider;
+use crate::resolve::BatchResolverProvider;
+use crate::scan::{ArpWatcherProvider, ConnectLogProvider, SubnetScannerProvider};
+use crate::smb::{OpenFilesCloseAction, SmbOpenFilesProvider, SmbShareProvider};
+use crate::speedtest::SpeedtestProvider;
+use crate::trace::GeoTracerouteProvider;
+use crate::wol::{WolInventoryProvider, WolSendAction};
 
 pub struct LanDomain;
 
@@ -55,7 +55,7 @@ pub fn tool_descriptors() -> Vec<ToolDescriptor> {
             id: "lan.ping",
             category: ToolCategory::Lan,
             subcommand: "ping",
-            nirsoft_name: "PingInfoView",
+            display_name: "Multi-Host Ping Monitor",
             description: "Monitor multiple hosts via ICMP/ICMPv6 echo and TCP connect fallback",
             read_only: true,
             has_mutating_action: false,
@@ -64,7 +64,7 @@ pub fn tool_descriptors() -> Vec<ToolDescriptor> {
             id: "lan.trace",
             category: ToolCategory::Lan,
             subcommand: "trace",
-            nirsoft_name: "CountryTraceRoute",
+            display_name: "GeoIP Traceroute",
             description: "Traceroute with ICMP TTL probes and offline GeoIP country/ASN lookup",
             read_only: true,
             has_mutating_action: false,
@@ -73,7 +73,7 @@ pub fn tool_descriptors() -> Vec<ToolDescriptor> {
             id: "lan.scan",
             category: ToolCategory::Lan,
             subcommand: "scan",
-            nirsoft_name: "LANIPScanner",
+            display_name: "Subnet Host & Port Scanner",
             description: "Concurrent ARP, ICMP, NetBIOS, and TCP port scanner over IPv4 CIDR",
             read_only: true,
             has_mutating_action: false,
@@ -82,7 +82,7 @@ pub fn tool_descriptors() -> Vec<ToolDescriptor> {
             id: "lan.wnetwatcher",
             category: ToolCategory::Lan,
             subcommand: "wnetwatcher",
-            nirsoft_name: "Wireless Network Watcher",
+            display_name: "LAN Device ARP Inventory",
             description: "ARP table and subnet sweep inventory with hostname and OUI vendor lookup",
             read_only: true,
             has_mutating_action: false,
@@ -91,7 +91,7 @@ pub fn tool_descriptors() -> Vec<ToolDescriptor> {
             id: "lan.connect-log",
             category: ToolCategory::Lan,
             subcommand: "connect-log",
-            nirsoft_name: "NetworkConnectLog",
+            display_name: "LAN Host Arrival & Departure Log",
             description: "Stateful ARP snapshot diff logger for host connect and disconnect events",
             read_only: true,
             has_mutating_action: false,
@@ -100,7 +100,7 @@ pub fn tool_descriptors() -> Vec<ToolDescriptor> {
             id: "lan.wol",
             category: ToolCategory::Lan,
             subcommand: "wol",
-            nirsoft_name: "WakeMeOnLan",
+            display_name: "Wake-on-LAN Host Inventory",
             description: "LAN host Wake-on-LAN inventory paired with lan.wol.send action",
             read_only: true,
             has_mutating_action: true,
@@ -109,7 +109,7 @@ pub fn tool_descriptors() -> Vec<ToolDescriptor> {
             id: "lan.netbios",
             category: ToolCategory::Lan,
             subcommand: "netbios",
-            nirsoft_name: "NetBScanner",
+            display_name: "NetBIOS NBSTAT Scanner",
             description: "Pure-Rust RFC 1001/1002 UDP port 137 NBSTAT NetBIOS scanner",
             read_only: true,
             has_mutating_action: false,
@@ -118,7 +118,7 @@ pub fn tool_descriptors() -> Vec<ToolDescriptor> {
             id: "lan.shares",
             category: ToolCategory::Lan,
             subcommand: "shares",
-            nirsoft_name: "NetResView",
+            display_name: "SMB & WNet Shared Resources",
             description: "SMB share and WNet shared network resource enumerator",
             read_only: true,
             has_mutating_action: false,
@@ -127,7 +127,7 @@ pub fn tool_descriptors() -> Vec<ToolDescriptor> {
             id: "lan.openfiles",
             category: ToolCategory::Lan,
             subcommand: "openfiles",
-            nirsoft_name: "NetworkOpenedFiles",
+            display_name: "SMB Server Open Files",
             description: "SMB open file enumerator (NetFileEnum) paired with lan.openfiles.close",
             read_only: true,
             has_mutating_action: true,
@@ -136,7 +136,7 @@ pub fn tool_descriptors() -> Vec<ToolDescriptor> {
             id: "lan.resolve",
             category: ToolCategory::Lan,
             subcommand: "resolve",
-            nirsoft_name: "FastResolver",
+            display_name: "Parallel DNS & MAC OUI Resolver",
             description: "Parallel forward/reverse DNS and IEEE MAC OUI resolver",
             read_only: true,
             has_mutating_action: false,
@@ -145,7 +145,7 @@ pub fn tool_descriptors() -> Vec<ToolDescriptor> {
             id: "lan.speedtest",
             category: ToolCategory::Lan,
             subcommand: "speedtest",
-            nirsoft_name: "DownTester",
+            display_name: "HTTP/HTTPS Download Throughput",
             description: "Streaming HTTP/HTTPS download throughput benchmark",
             read_only: true,
             has_mutating_action: false,
@@ -155,17 +155,17 @@ pub fn tool_descriptors() -> Vec<ToolDescriptor> {
 
 pub fn providers(ctx: &NetContext) -> Vec<Arc<dyn TableProvider>> {
     vec![
-        Arc::new(PingInfoViewProvider::new(ctx.clone())),
-        Arc::new(CountryTraceRouteProvider::new(ctx.clone())),
-        Arc::new(LanIpScannerProvider::new(ctx.clone())),
-        Arc::new(WirelessNetWatcherProvider::new(ctx.clone())),
-        Arc::new(NetworkConnectLogProvider::new(ctx.clone())),
-        Arc::new(WakeMeOnLanProvider::new(ctx.clone())),
-        Arc::new(NetBScannerProvider::new(ctx.clone())),
-        Arc::new(NetResViewProvider::new(ctx.clone())),
-        Arc::new(NetworkOpenedFilesProvider::new(ctx.clone())),
-        Arc::new(FastResolverProvider::new(ctx.clone())),
-        Arc::new(DownTesterProvider::new(ctx.clone())),
+        Arc::new(PingMonitorProvider::new(ctx.clone())),
+        Arc::new(GeoTracerouteProvider::new(ctx.clone())),
+        Arc::new(SubnetScannerProvider::new(ctx.clone())),
+        Arc::new(ArpWatcherProvider::new(ctx.clone())),
+        Arc::new(ConnectLogProvider::new(ctx.clone())),
+        Arc::new(WolInventoryProvider::new(ctx.clone())),
+        Arc::new(NetBiosScannerProvider::new(ctx.clone())),
+        Arc::new(SmbShareProvider::new(ctx.clone())),
+        Arc::new(SmbOpenFilesProvider::new(ctx.clone())),
+        Arc::new(BatchResolverProvider::new(ctx.clone())),
+        Arc::new(SpeedtestProvider::new(ctx.clone())),
     ]
 }
 

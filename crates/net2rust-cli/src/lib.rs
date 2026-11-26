@@ -12,7 +12,7 @@ use std::sync::Arc;
 use anyhow::{Context, bail};
 use clap::{Args, Parser, Subcommand};
 use guap_mcp::{ActionCommand, McpServerRegistry, PolicyMode};
-use guap_table::{GetNirQuery, SortDirection, TableData, TableProvider, TableQuery, TableSchema};
+use guap_table::{GuapQuery, SortDirection, TableData, TableProvider, TableQuery, TableSchema};
 use net2rust_core::{NetContext, OfflineConfig, ToolCategory, ToolDescriptor};
 use net2rust_report::{
     CustodyManifestBuilder, ExportFormat, ReportOptions, format_file_extension, render_report,
@@ -64,7 +64,7 @@ pub struct Cli {
     #[arg(long, global = true, visible_alias = "custody", value_name = "PATH")]
     pub custody_out: Option<PathBuf>,
 
-    /// GetNir filter expression (e.g. "protocol == TCP AND local_port >= 443")
+    /// Tabular filter expression (e.g. "protocol == TCP AND local_port >= 443")
     #[arg(long, global = true, allow_hyphen_values = true, value_name = "EXPR")]
     pub filter: Option<String>,
 
@@ -130,36 +130,36 @@ pub enum Commands {
 
 #[derive(Debug, Subcommand)]
 pub enum SocketsSub {
-    /// CurrPorts: active TCP/UDP sockets & owning processes (optional --close)
+    /// Active TCP/UDP sockets & owning processes (optional --close)
     Ports(PortsArgs),
-    /// TcpLogView: TCP socket open/close/listen transition log
+    /// TCP socket open/close/listen transition log
     Tcplog,
-    /// LiveTcpUdpWatch: live ETW Kernel-Network TCP/UDP activity
+    /// Live ETW Kernel-Network TCP/UDP activity
     Live,
-    /// AppNetworkCounter: per-application TCP/UDP byte counters
+    /// Per-application TCP/UDP byte counters
     #[command(name = "app-net")]
     AppNet,
-    /// ProcessTCPSummary: per-process TCP state counts & throughput
+    /// Per-process TCP state counts & throughput
     #[command(name = "proc-tcp")]
     ProcTcp,
-    /// TCPConnectProblemView: TCP timeouts, refusals, and retransmissions
+    /// TCP timeouts, refusals, and retransmissions
     #[command(name = "tcp-errors")]
     TcpErrors,
-    /// DNSLookupView: DNS client lookup telemetry
+    /// DNS client lookup telemetry
     #[command(name = "dns-log")]
     DnsLog,
-    /// NetworkCountersWatch: IPv4/IPv6/TCP/UDP/ICMP stack counters
+    /// IPv4/IPv6/TCP/UDP/ICMP stack counters
     Counters,
-    /// AdapterWatch: adapter link speed, throughput, errors, discards
+    /// Adapter link speed, throughput, errors, discards
     #[command(name = "adapter-watch")]
-    AdapterWatch,
-    /// NetworkInterfacesView: full interface, IP, gateway, DNS, DHCP view
+    AdapterMonitor,
+    /// Full interface, IP, gateway, DNS, DHCP view
     Interfaces,
-    /// NetRouteView: IPv4/IPv6 routing table (optional --add / --delete)
+    /// IPv4/IPv6 routing table (optional --add / --delete)
     Routes(RoutesArgs),
-    /// IPNeighborsView: ARP and IPv6 NDP neighbor cache
+    /// ARP and IPv6 NDP neighbor cache
     Neighbors,
-    /// IPPathTableView: OS IP path table, next-hop RTT, MTU
+    /// OS IP path table, next-hop RTT, MTU
     Paths,
 }
 
@@ -202,56 +202,56 @@ pub struct RoutesArgs {
 
 #[derive(Debug, Subcommand)]
 pub enum CaptureSub {
-    /// SmartSniff: IPv4/IPv6 TCP/UDP/ICMP stream summary
+    /// IPv4/IPv6 TCP/UDP/ICMP stream summary
     Sniff,
-    /// NetworkTrafficView: aggregated traffic flows
+    /// Aggregated traffic flows
     Traffic,
-    /// HTTPNetworkSniffer: HTTP request/response metadata (R4 credential-free)
+    /// HTTP request/response metadata (R4 credential-free)
     Http,
-    /// DNSQuerySniffer: DNS queries, answers, TTLs, latency
+    /// DNS queries, answers, TTLs, latency
     Dns,
-    /// DHCPLogView: BOOTP/DHCPv4 lease transactions
+    /// BOOTP/DHCPv4 lease transactions
     Dhcp,
-    /// mDNSView: Multicast DNS / DNS-SD listener
+    /// Multicast DNS / DNS-SD listener
     Mdns,
-    /// WhoIsConnectedSniffer: passive LAN host discovery
+    /// Passive LAN host discovery
     #[command(name = "whois-lan")]
     WhoisLan,
-    /// WebCookiesSniffer: Cookie/Set-Cookie metadata with R4 token redaction
+    /// Cookie/Set-Cookie metadata with R4 token redaction
     Cookies,
-    /// WebSiteSniffer: static asset URL & content-type reconstruction
+    /// Static asset URL & content-type reconstruction
     Website,
-    /// NetworkLatencyView: passive TCP SYN to SYN-ACK latency
+    /// Passive TCP SYN to SYN-ACK latency
     Latency,
-    /// WifiChannelMonitor: 802.11 RadioTap/beacon/probe channel analyzer
+    /// 802.11 RadioTap/beacon/probe channel analyzer
     #[command(name = "wifi-mon")]
     WifiMon,
 }
 
 #[derive(Debug, Subcommand)]
 pub enum LanSub {
-    /// PingInfoView: concurrent ICMP/TCP ping monitor
+    /// Concurrent ICMP/TCP ping monitor
     Ping,
-    /// CountryTraceRoute: ICMP traceroute with offline GeoIP enrichment
+    /// ICMP traceroute with offline GeoIP enrichment
     Trace,
-    /// LANIPScanner: concurrent ARP/ICMP/NetBIOS/port scanner
+    /// Concurrent ARP/ICMP/NetBIOS/port scanner
     Scan,
-    /// Wireless Network Watcher: active subnet ARP sweep
+    /// Active subnet ARP sweep
     Wnetwatcher,
-    /// NetworkConnectLog: LAN host arrival/departure diff logger
+    /// LAN host arrival/departure diff logger
     #[command(name = "connect-log")]
     ConnectLog,
-    /// WakeMeOnLan: LAN host inventory (optional --send magic packet)
+    /// LAN host inventory (optional --send magic packet)
     Wol(WolArgs),
-    /// NetBScanner: UDP 137 NetBIOS node status scanner
+    /// UDP 137 NetBIOS node status scanner
     Netbios,
-    /// NetResView: SMB/WNet shared folder enumerator
+    /// SMB/WNet shared folder enumerator
     Shares,
-    /// NetworkOpenedFiles: SMB open-file inspector (optional --close-id)
+    /// SMB open-file inspector (optional --close-id)
     Openfiles(OpenfilesArgs),
-    /// FastResolver: parallel DNS and MAC OUI resolver
+    /// Parallel DNS and MAC OUI resolver
     Resolve,
-    /// DownTester: multi-target HTTP/HTTPS download throughput benchmark
+    /// Multi-target HTTP/HTTPS download throughput benchmark
     Speedtest,
 }
 
@@ -281,27 +281,27 @@ pub struct OpenfilesArgs {
 
 #[derive(Debug, Subcommand)]
 pub enum OsintSub {
-    /// IPNetInfo: RIR WHOIS/RDAP IP block lookup
+    /// RIR WHOIS/RDAP IP block lookup
     Ipnet,
-    /// WhosIP: IP WHOIS/RDAP referral & ASN resolver
+    /// IP WHOIS/RDAP referral & ASN resolver
     Whosip,
-    /// IPInfoOffline: embedded offline IPv4/IPv6 CIDR to country & ASN
+    /// Embedded offline IPv4/IPv6 CIDR to country & ASN
     Ipoffline,
-    /// WhoisThisDomain: IANA & registrar domain WHOIS/RDAP
+    /// IANA & registrar domain WHOIS/RDAP
     #[command(name = "whois-domain")]
     WhoisDomain,
-    /// WhoisCL: batch WHOIS query runner
+    /// Batch WHOIS query runner
     Whoiscl,
-    /// DNSDataView: direct DNS record resolver
+    /// Direct DNS record resolver
     Dns,
-    /// DomainHostingView: aggregated WHOIS/DNS/ASN/hosting profiler
+    /// Aggregated WHOIS/DNS/ASN/hosting profiler
     Hosting,
-    /// MACAddressView: embedded offline IEEE MAC OUI vendor lookup
+    /// Embedded offline IEEE MAC OUI vendor lookup
     Oui,
-    /// QuickSetDNS: interface DNS inspector (optional --apply)
+    /// Interface DNS inspector (optional --apply)
     #[command(name = "set-dns")]
     SetDns(SetDnsArgs),
-    /// NetConnectChoose: NetworkList profile inspector (optional --connect / --disconnect)
+    /// NetworkList profile inspector (optional --connect / --disconnect)
     #[command(name = "net-profiles")]
     NetProfiles(NetProfilesArgs),
 }
@@ -337,34 +337,34 @@ pub struct NetProfilesArgs {
 
 #[derive(Debug, Subcommand)]
 pub enum RadioSub {
-    /// WifiInfoView: 802.11 BSS/IE scanner (zero key extraction)
+    /// 802.11 BSS/IE scanner (zero key extraction)
     #[command(name = "wifi-info")]
     WifiInfo,
-    /// WirelessNetView: Wi-Fi availability & signal monitor
+    /// Wi-Fi availability & signal monitor
     #[command(name = "wifi-scan")]
     WifiScan,
-    /// WirelessNetConsole: streaming Wi-Fi scan table
+    /// Streaming Wi-Fi scan table
     #[command(name = "wifi-console")]
     WifiConsole,
-    /// WirelessConnectionInfo: active Wi-Fi PHY/channel/RSSI
+    /// Active Wi-Fi PHY/channel/RSSI
     #[command(name = "wifi-conn")]
     WifiConn,
-    /// ManageWirelessNetworks: saved WLAN profile metadata (optional --set-order / --delete / --toggle-auto)
+    /// Saved WLAN profile metadata (optional --set-order / --delete / --toggle-auto)
     #[command(name = "wifi-profiles")]
     WifiProfiles(WifiProfilesArgs),
-    /// HostedNetworkStarter: SoftAP status (optional --start / --stop)
+    /// SoftAP status (optional --start / --stop)
     #[command(name = "wifi-hosted")]
     WifiHosted(WifiHostedArgs),
-    /// BluetoothView: Bluetooth Classic discovery
+    /// Bluetooth Classic discovery
     #[command(name = "bt-view")]
     BtView,
-    /// BluetoothLogView: Bluetooth arrival/departure log
+    /// Bluetooth arrival/departure log
     #[command(name = "bt-log")]
     BtLog,
-    /// BluetoothCL: deterministic Bluetooth Classic enumeration
+    /// Deterministic Bluetooth Classic enumeration
     #[command(name = "bt-cl")]
     BtCl,
-    /// BluetoothLEView: BLE advertisement & GATT UUID scanner
+    /// BLE advertisement & GATT UUID scanner
     Ble,
 }
 
@@ -531,19 +531,19 @@ pub fn parse_sort_compat(spec: Option<&str>) -> anyhow::Result<Vec<(String, Sort
         })
         .collect();
     let joined = rewritten.join(",");
-    Ok(GetNirQuery::parse_sort(&joined)?)
+    Ok(GuapQuery::parse_sort(&joined)?)
 }
 
 pub fn build_table_query(cli: &Cli, schema: &TableSchema) -> anyhow::Result<TableQuery> {
     let sort = parse_sort_compat(cli.sort.as_deref())?;
-    let gnq = GetNirQuery {
+    let gq = GuapQuery {
         columns: None,
         filter_expr: cli.filter.clone(),
         sort,
         offset: 0,
         limit: cli.max_rows,
     };
-    Ok(gnq.to_table_query(schema)?)
+    Ok(gq.to_table_query(schema)?)
 }
 
 fn find_provider<'a>(
@@ -685,7 +685,7 @@ fn run_sockets(cli: &Cli, ctx: &NetContext, sub: &SocketsSub) -> anyhow::Result<
                 SocketsSub::TcpErrors => "sockets.tcp-errors",
                 SocketsSub::DnsLog => "sockets.dns-log",
                 SocketsSub::Counters => "sockets.counters",
-                SocketsSub::AdapterWatch => "sockets.adapter-watch",
+                SocketsSub::AdapterMonitor => "sockets.adapter-watch",
                 SocketsSub::Interfaces => "sockets.interfaces",
                 SocketsSub::Routes(_) => "sockets.routes",
                 SocketsSub::Neighbors => "sockets.neighbors",
@@ -986,7 +986,7 @@ fn run_list_tools(ctx: &NetContext, args: &ListToolsArgs) -> anyhow::Result<()> 
             } else {
                 ""
             };
-            println!("  {:<22} {:<26} {}{}", d.id, d.nirsoft_name, d.description, mut_tag);
+            println!("  {:<22} {:<40} {}{}", d.id, d.display_name, d.description, mut_tag);
         }
     }
     Ok(())

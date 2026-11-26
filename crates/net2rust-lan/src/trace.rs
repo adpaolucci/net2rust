@@ -77,7 +77,7 @@ pub fn run_traceroute(
     Ok(hops)
 }
 
-pub struct CountryTraceRouteProvider {
+pub struct GeoTracerouteProvider {
     ctx: NetContext,
     target: String,
     max_hops: u8,
@@ -86,7 +86,7 @@ pub struct CountryTraceRouteProvider {
     dns: Arc<dyn DnsBackend>,
 }
 
-impl CountryTraceRouteProvider {
+impl GeoTracerouteProvider {
     pub fn new(ctx: NetContext) -> Self {
         Self {
             ctx,
@@ -114,7 +114,7 @@ impl CountryTraceRouteProvider {
     pub fn schema_def() -> TableSchema {
         TableSchema::new(
             "lan.trace",
-            "CountryTraceRoute — GeoIP Traceroute",
+            "GeoIP Traceroute",
             vec![
                 ColumnDef::new("target", "Target", ColumnType::Text).with_width_hint(150),
                 ColumnDef::new("hop", "Hop", ColumnType::Uint).with_width_hint(60),
@@ -160,13 +160,13 @@ impl CountryTraceRouteProvider {
     }
 }
 
-impl TableProvider for CountryTraceRouteProvider {
+impl TableProvider for GeoTracerouteProvider {
     fn tool_id(&self) -> &'static str {
         "lan.trace"
     }
 
     fn description(&self) -> &'static str {
-        "Trace network hops with ICMP TTL probes and offline GeoIP country/ASN enrichment (CountryTraceRoute)"
+        "Trace network hops with ICMP TTL probes and offline GeoIP country/ASN enrichment"
     }
 
     fn schema(&self) -> TableSchema {
@@ -277,7 +277,7 @@ mod tests {
 
     #[test]
     fn test_traceroute_multi_hop_and_geoip_enrichment() {
-        let provider = CountryTraceRouteProvider::new(NetContext::live())
+        let provider = GeoTracerouteProvider::new(NetContext::live())
             .with_target("8.8.8.8", 10)
             .with_backends(Arc::new(MockTracePing), Arc::new(MockTraceDns));
         let data = provider.query(&TableQuery::default()).unwrap();
@@ -297,7 +297,7 @@ mod tests {
         assert_eq!(data.rows[2].cells[8], CellValue::Text("AS15169".into()));
 
         // Custom target "127.0.0.1" under offline context still runs configured target/backends.
-        let custom_offline = CountryTraceRouteProvider::new(NetContext::offline(Default::default()))
+        let custom_offline = GeoTracerouteProvider::new(NetContext::offline(Default::default()))
             .with_target("127.0.0.1", 3)
             .with_backends(Arc::new(MockTracePing), Arc::new(MockTraceDns));
         let offline_data = custom_offline.query(&TableQuery::default()).unwrap();

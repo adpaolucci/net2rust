@@ -1,4 +1,4 @@
-//! `capture.latency` (`NetworkLatencyView`) TableProvider with Karn's retransmission exclusion.
+//! `capture.latency` TableProvider with Karn's retransmission exclusion.
 
 use std::collections::{BTreeMap, HashMap};
 use std::net::IpAddr;
@@ -27,7 +27,7 @@ impl LatencyProvider {
 fn build_schema() -> TableSchema {
     TableSchema::new(
         "capture.latency",
-        "NetworkLatencyView — Passive TCP Handshake RTT",
+        "Passive TCP Handshake RTT",
         vec![
             ColumnDef::new("src_ip", "SrcIP", ColumnType::IpAddr).with_width_hint(150),
             ColumnDef::new("dst_ip", "DstIP", ColumnType::IpAddr).with_width_hint(150),
@@ -77,7 +77,7 @@ impl TableProvider for LatencyProvider {
     }
 
     fn description(&self) -> &'static str {
-        "NetworkLatencyView — passive TCP SYN -> SYN-ACK RTT with Karn's retransmission exclusion"
+        "Passive TCP SYN -> SYN-ACK RTT with Karn's retransmission exclusion"
     }
 
     fn schema(&self) -> TableSchema {

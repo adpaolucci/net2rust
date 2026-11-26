@@ -11,7 +11,7 @@ use serde::{Deserialize, Serialize};
 use crate::model::{load_fixture_json, parse_guid_flexible};
 
 pub const TOOL_ID: &str = "osint.set-dns";
-pub const DESCRIPTION: &str = "QuickSetDNS equivalent: interface DNS server inspector (mutating DNS change gated).";
+pub const DESCRIPTION: &str = "Interface DNS server inspector (mutating DNS change gated).";
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct DnsInterfaceRecord {
@@ -61,7 +61,7 @@ pub trait DnsBackend: Send + Sync {
 pub fn schema() -> TableSchema {
     TableSchema::new(
         TOOL_ID,
-        "QuickSetDNS — Interface DNS Configuration",
+        "Interface DNS Configuration",
         vec![
             ColumnDef::new("AdapterName", "Adapter Name", ColumnType::Text).with_width_hint(180),
             ColumnDef::new("InterfaceGuid", "Interface GUID", ColumnType::Text).with_width_hint(260),
@@ -790,13 +790,13 @@ pub mod win32_backend {
     impl DnsBackend for WindowsDnsBackend {
         fn list_interfaces(&self) -> NetResult<Vec<DnsInterfaceRecord>> {
             Err(NetError::NotSupported(
-                "live QuickSetDNS interface enumeration requires Windows".into(),
+                "live interface DNS enumeration requires Windows".into(),
             ))
         }
 
         fn apply_dns(&self, _req: &SetDnsRequest, _dry_run: bool) -> NetResult<SetDnsApplyResult> {
             Err(NetError::NotSupported(
-                "live QuickSetDNS modification requires Windows".into(),
+                "live interface DNS modification requires Windows".into(),
             ))
         }
     }

@@ -20,7 +20,7 @@ use crate::transport::{
 use crate::whois::normalize_domain;
 
 pub const TOOL_ID: &str = "osint.whoiscl";
-pub const DESCRIPTION: &str = "WhoisCL equivalent: deterministic batch CLI WHOIS query runner.";
+pub const DESCRIPTION: &str = "Deterministic batch CLI WHOIS query runner.";
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct WhoisClRecord {
@@ -35,7 +35,7 @@ pub struct WhoisClRecord {
 pub fn schema() -> TableSchema {
     TableSchema::new(
         TOOL_ID,
-        "WhoisCL — Batch WHOIS Query Runner",
+        "Batch WHOIS Query Runner",
         vec![
             ColumnDef::new("Query", "Query", ColumnType::Text).with_width_hint(180),
             ColumnDef::new("WhoisServer", "WHOIS Server", ColumnType::Text).with_width_hint(180),

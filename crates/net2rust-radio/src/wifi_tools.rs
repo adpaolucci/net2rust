@@ -61,7 +61,7 @@ impl TableProvider for WifiInfoProvider {
     }
 
     fn description(&self) -> &'static str {
-        "WifiInfoView equivalent: 802.11 BSS/IE scanner (HT/VHT/HE/EHT, channel, RSSI, security mode, zero key extraction)."
+        "802.11 BSS/IE scanner (HT/VHT/HE/EHT, channel, RSSI, security mode, zero key extraction)."
     }
 
     fn schema(&self) -> TableSchema {
@@ -201,7 +201,7 @@ impl TableProvider for WifiScanProvider {
     }
 
     fn description(&self) -> &'static str {
-        "WirelessNetView equivalent: continuous Wi-Fi availability, signal average, and detection counter."
+        "Continuous Wi-Fi availability, signal average, and detection counter."
     }
 
     fn schema(&self) -> TableSchema {
@@ -322,7 +322,7 @@ impl TableProvider for WifiConsoleProvider {
     }
 
     fn description(&self) -> &'static str {
-        "WirelessNetConsole equivalent: streaming console Wi-Fi scan table."
+        "Streaming console Wi-Fi scan table."
     }
 
     fn schema(&self) -> TableSchema {
@@ -417,7 +417,7 @@ impl TableProvider for WifiConnProvider {
     }
 
     fn description(&self) -> &'static str {
-        "WirelessConnectionInfo equivalent: active Wi-Fi association PHY, channel, Tx/Rx rates, and RSSI."
+        "Active Wi-Fi association PHY, channel, Tx/Rx rates, and RSSI."
     }
 
     fn schema(&self) -> TableSchema {
@@ -515,7 +515,7 @@ impl TableProvider for WifiProfilesProvider {
     }
 
     fn description(&self) -> &'static str {
-        "ManageWirelessNetworks equivalent: saved WLAN profile metadata with R4 keyMaterial redaction (mutating reorder/delete/toggle-auto actions gated)."
+        "Saved WLAN profile metadata with R4 keyMaterial redaction (mutating reorder/delete/toggle-auto actions gated)."
     }
 
     fn schema(&self) -> TableSchema {
@@ -621,7 +621,7 @@ impl TableProvider for WifiHostedProvider {
     }
 
     fn description(&self) -> &'static str {
-        "HostedNetworkStarter equivalent: Windows Hosted Network status inspector (mutating start/stop gated)."
+        "Windows Hosted Network status inspector (mutating start/stop gated)."
     }
 
     fn schema(&self) -> TableSchema {

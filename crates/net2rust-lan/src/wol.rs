@@ -67,13 +67,13 @@ pub struct WolHostRecord {
     pub last_seen: DateTime<Utc>,
 }
 
-pub struct WakeMeOnLanProvider {
+pub struct WolInventoryProvider {
     ctx: NetContext,
     arp: Arc<dyn ArpBackend>,
     dns: Arc<dyn DnsBackend>,
 }
 
-impl WakeMeOnLanProvider {
+impl WolInventoryProvider {
     pub fn new(ctx: NetContext) -> Self {
         Self {
             ctx,
@@ -91,7 +91,7 @@ impl WakeMeOnLanProvider {
     pub fn schema_def() -> TableSchema {
         TableSchema::new(
             "lan.wol",
-            "WakeMeOnLan — Wake-on-LAN Host Inventory",
+            "Wake-on-LAN Host Inventory",
             vec![
                 ColumnDef::new("ip", "IP Address", ColumnType::IpAddr).with_width_hint(130),
                 ColumnDef::new("hostname", "Computer Name", ColumnType::Text).with_width_hint(180),
@@ -146,13 +146,13 @@ impl WakeMeOnLanProvider {
     }
 }
 
-impl TableProvider for WakeMeOnLanProvider {
+impl TableProvider for WolInventoryProvider {
     fn tool_id(&self) -> &'static str {
         "lan.wol"
     }
 
     fn description(&self) -> &'static str {
-        "Discover LAN hosts with MAC addresses and Wake-on-LAN broadcast targets (WakeMeOnLan)"
+        "Discover LAN hosts with MAC addresses and Wake-on-LAN broadcast targets"
     }
 
     fn schema(&self) -> TableSchema {

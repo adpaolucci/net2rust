@@ -18,119 +18,119 @@ build:
 tools:
   # -sockets (13 TableProviders)
   - name: sockets.ports
-    description: "CurrPorts equivalent: enumerate active TCP/UDP sockets, owning processes, and connection states (mutating close_socket gated)."
+    description: "Enumerate active TCP/UDP sockets, owning processes, and connection states (mutating close_socket gated)."
   - name: sockets.tcplog
-    description: "TcpLogView equivalent: track TCP socket open, close, and listen state transitions."
+    description: "Track TCP socket open, close, and listen state transitions."
   - name: sockets.live
-    description: "LiveTcpUdpWatch equivalent: live ETW Kernel-Network TCP/UDP activity per socket and PID."
+    description: "Live ETW Kernel-Network TCP/UDP activity per socket and PID."
   - name: sockets.app-net
-    description: "AppNetworkCounter equivalent: per-application TCP/UDP byte and bandwidth counters via ETW."
+    description: "Per-application TCP/UDP byte and bandwidth counters via ETW."
   - name: sockets.proc-tcp
-    description: "ProcessTCPSummary equivalent: per-process TCP state counts and throughput summary."
+    description: "Per-process TCP state counts and throughput summary."
   - name: sockets.tcp-errors
-    description: "TCPConnectProblemView equivalent: TCP connection timeouts, refusals, and retransmissions."
+    description: "TCP connection timeouts, refusals, and retransmissions."
   - name: sockets.dns-log
-    description: "DNSLookupView equivalent: DNS client lookup telemetry and local resolver cache."
+    description: "DNS client lookup telemetry and local resolver cache."
   - name: sockets.counters
-    description: "NetworkCountersWatch equivalent: IPv4/IPv6/TCP/UDP/ICMP protocol stack counters and deltas."
+    description: "IPv4/IPv6/TCP/UDP/ICMP protocol stack counters and deltas."
   - name: sockets.adapter-watch
-    description: "AdapterWatch equivalent: network interface link speed, throughput rates, errors, and discards."
+    description: "Network interface link speed, throughput rates, errors, and discards."
   - name: sockets.interfaces
-    description: "NetworkInterfacesView equivalent: full network adapter configuration, IPv4/IPv6, gateways, DNS, and DHCP."
+    description: "Full network adapter configuration, IPv4/IPv6, gateways, DNS, and DHCP."
   - name: sockets.routes
-    description: "NetRouteView equivalent: IPv4/IPv6 routing table inspector (mutating route create/delete gated)."
+    description: "IPv4/IPv6 routing table inspector (mutating route create/delete gated)."
   - name: sockets.neighbors
-    description: "IPNeighborsView equivalent: ARP and IPv6 NDP neighbor cache with OUI vendor lookup."
+    description: "ARP and IPv6 NDP neighbor cache with OUI vendor lookup."
   - name: sockets.paths
-    description: "IPPathTableView equivalent: OS IP path table, next-hop RTT, link speed, and MTU."
+    description: "OS IP path table, next-hop RTT, link speed, and MTU."
   # -capture (11 TableProviders) - R4 credential-free
   - name: capture.sniff
-    description: "SmartSniff equivalent: IPv4/IPv6 TCP/UDP/ICMP stream summary via NDIS ETW, optional Npcap, or offline PCAP/PCAPNG/ETL."
+    description: "IPv4/IPv6 TCP/UDP/ICMP stream summary via NDIS ETW, optional Npcap, or offline PCAP/PCAPNG/ETL."
   - name: capture.traffic
-    description: "NetworkTrafficView equivalent: aggregated traffic flows by protocol, endpoint, port, and byte volume."
+    description: "Aggregated traffic flows by protocol, endpoint, port, and byte volume."
   - name: capture.http
-    description: "HTTPNetworkSniffer equivalent: HTTP request/response metadata without Authorization or credential extraction (R4)."
+    description: "HTTP request/response metadata without Authorization or credential extraction (R4)."
   - name: capture.dns
-    description: "DNSQuerySniffer equivalent: wire-level RFC 1035 DNS queries, answers, TTLs, and latency."
+    description: "Wire-level RFC 1035 DNS queries, answers, TTLs, and latency."
   - name: capture.dhcp
-    description: "DHCPLogView equivalent: BOOTP/DHCPv4 Discover/Offer/Request/Ack lease transaction decoder."
+    description: "BOOTP/DHCPv4 Discover/Offer/Request/Ack lease transaction decoder."
   - name: capture.mdns
-    description: "mDNSView equivalent: Multicast DNS (UDP 5353) and DNS-SD service discovery listener."
+    description: "Multicast DNS (UDP 5353) and DNS-SD service discovery listener."
   - name: capture.whois-lan
-    description: "WhoIsConnectedSniffer equivalent: passive ARP/DHCP/mDNS/NetBIOS/SSDP LAN host discovery."
+    description: "Passive ARP/DHCP/mDNS/NetBIOS/SSDP LAN host discovery."
   - name: capture.cookies
-    description: "WebCookiesSniffer equivalent: HTTP Cookie/Set-Cookie header names, domains, and flags with sensitive token redaction (R4)."
+    description: "HTTP Cookie/Set-Cookie header names, domains, and flags with sensitive token redaction (R4)."
   - name: capture.website
-    description: "WebSiteSniffer equivalent: HTTP static asset URL and content-type reconstruction from captures."
+    description: "HTTP static asset URL and content-type reconstruction from captures."
   - name: capture.latency
-    description: "NetworkLatencyView equivalent: passive TCP SYN to SYN-ACK round-trip latency analyzer."
+    description: "Passive TCP SYN to SYN-ACK round-trip latency analyzer."
   - name: capture.wifi-mon
-    description: "WifiChannelMonitor equivalent: 802.11 RadioTap/beacon/probe channel analyzer (offline PCAP or monitor mode)."
+    description: "802.11 RadioTap/beacon/probe channel analyzer (offline PCAP or monitor mode)."
   # -lan (11 TableProviders)
   - name: lan.ping
-    description: "PingInfoView equivalent: concurrent ICMP and TCP ping monitor with loss and RTT statistics."
+    description: "Concurrent ICMP and TCP ping monitor with loss and RTT statistics."
   - name: lan.trace
-    description: "CountryTraceRoute equivalent: ICMP traceroute with offline GeoIP country and ASN enrichment."
+    description: "ICMP traceroute with offline GeoIP country and ASN enrichment."
   - name: lan.scan
-    description: "LANIPScanner equivalent: concurrent ARP, ICMP, NetBIOS, and port scanner across CIDR ranges."
+    description: "Concurrent ARP, ICMP, NetBIOS, and port scanner across CIDR ranges."
   - name: lan.wnetwatcher
-    description: "Wireless Network Watcher equivalent: active subnet ARP sweep with MAC OUI vendor identification."
+    description: "Active subnet ARP sweep with MAC OUI vendor identification."
   - name: lan.connect-log
-    description: "NetworkConnectLog equivalent: LAN host arrival and departure diff logger."
+    description: "LAN host arrival and departure diff logger."
   - name: lan.wol
-    description: "WakeMeOnLan equivalent: LAN host inventory (mutating Wake-on-LAN magic packet send gated)."
+    description: "LAN host inventory (mutating Wake-on-LAN magic packet send gated)."
   - name: lan.netbios
-    description: "NetBScanner equivalent: UDP 137 NBSTAT NetBIOS node status and workgroup scanner."
+    description: "UDP 137 NBSTAT NetBIOS node status and workgroup scanner."
   - name: lan.shares
-    description: "NetResView equivalent: Windows SMB/WNet shared folder and network resource enumerator."
+    description: "Windows SMB/WNet shared folder and network resource enumerator."
   - name: lan.openfiles
-    description: "NetworkOpenedFiles equivalent: SMB server open-file and lock inspector (mutating close_file gated)."
+    description: "SMB server open-file and lock inspector (mutating close_file gated)."
   - name: lan.resolve
-    description: "FastResolver equivalent: parallel forward/reverse DNS and MAC OUI batch resolver."
+    description: "Parallel forward/reverse DNS and MAC OUI batch resolver."
   - name: lan.speedtest
-    description: "DownTester equivalent: multi-target HTTP/HTTPS download throughput benchmark."
+    description: "Multi-target HTTP/HTTPS download throughput benchmark."
   # -osint (10 TableProviders)
   - name: osint.ipnet
-    description: "IPNetInfo equivalent: RIR WHOIS (TCP 43) and RDAP IP block, org, and abuse contact lookup."
+    description: "RIR WHOIS (TCP 43) and RDAP IP block, org, and abuse contact lookup."
   - name: osint.whosip
-    description: "WhosIP equivalent: IP WHOIS/RDAP resolver with referral chasing and ASN mapping."
+    description: "IP WHOIS/RDAP resolver with referral chasing and ASN mapping."
   - name: osint.ipoffline
-    description: "IPInfoOffline equivalent: embedded offline IPv4/IPv6 CIDR to country and ASN lookup."
+    description: "Embedded offline IPv4/IPv6 CIDR to country and ASN lookup."
   - name: osint.whois-domain
-    description: "WhoisThisDomain equivalent: IANA and registrar WHOIS/RDAP domain registration lookup."
+    description: "IANA and registrar WHOIS/RDAP domain registration lookup."
   - name: osint.whoiscl
-    description: "WhoisCL equivalent: deterministic batch CLI WHOIS query runner."
+    description: "Deterministic batch CLI WHOIS query runner."
   - name: osint.dns
-    description: "DNSDataView equivalent: direct DNS A, AAAA, MX, NS, TXT, SOA, CNAME, PTR, SRV, CAA resolver."
+    description: "Direct DNS A, AAAA, MX, NS, TXT, SOA, CNAME, PTR, SRV, CAA resolver."
   - name: osint.hosting
-    description: "DomainHostingView equivalent: aggregated WHOIS, DNS, ASN, web host, and mail provider profiler."
+    description: "Aggregated WHOIS, DNS, ASN, web host, and mail provider profiler."
   - name: osint.oui
-    description: "MACAddressView equivalent: embedded offline IEEE MA-L/MA-M/MA-S MAC OUI vendor lookup."
+    description: "Embedded offline IEEE MA-L/MA-M/MA-S MAC OUI vendor lookup."
   - name: osint.set-dns
-    description: "QuickSetDNS equivalent: interface DNS server inspector (mutating DNS change gated)."
+    description: "Interface DNS server inspector (mutating DNS change gated)."
   - name: osint.net-profiles
-    description: "NetConnectChoose equivalent: Windows NetworkList profile inspector (mutating connect/disconnect gated)."
+    description: "Windows NetworkList profile inspector (mutating connect/disconnect gated)."
   # -radio (10 TableProviders) - R4 no plaintext Wi-Fi keys
   - name: radio.wifi-info
-    description: "WifiInfoView equivalent: 802.11 BSS/IE scanner (HT/VHT/HE/EHT, channel, RSSI, security mode, zero key extraction)."
+    description: "802.11 BSS/IE scanner (HT/VHT/HE/EHT, channel, RSSI, security mode, zero key extraction)."
   - name: radio.wifi-scan
-    description: "WirelessNetView equivalent: continuous Wi-Fi availability, signal average, and detection counter."
+    description: "Continuous Wi-Fi availability, signal average, and detection counter."
   - name: radio.wifi-console
-    description: "WirelessNetConsole equivalent: streaming console Wi-Fi scan table."
+    description: "Streaming console Wi-Fi scan table."
   - name: radio.wifi-conn
-    description: "WirelessConnectionInfo equivalent: active Wi-Fi association PHY, channel, Tx/Rx rates, and RSSI."
+    description: "Active Wi-Fi association PHY, channel, Tx/Rx rates, and RSSI."
   - name: radio.wifi-profiles
-    description: "ManageWirelessNetworks equivalent: saved WLAN profile metadata with R4 keyMaterial redaction (mutating reorder/delete/toggle-auto gated)."
+    description: "Saved WLAN profile metadata with R4 keyMaterial redaction (mutating reorder/delete/toggle-auto gated)."
   - name: radio.wifi-hosted
-    description: "HostedNetworkStarter equivalent: Windows Hosted Network status inspector (mutating start/stop gated)."
+    description: "Windows Hosted Network status inspector (mutating start/stop gated)."
   - name: radio.bt-view
-    description: "BluetoothView equivalent: Bluetooth Classic device discovery monitor."
+    description: "Bluetooth Classic device discovery monitor."
   - name: radio.bt-log
-    description: "BluetoothLogView equivalent: Bluetooth device arrival and departure event log."
+    description: "Bluetooth device arrival and departure event log."
   - name: radio.bt-cl
-    description: "BluetoothCL equivalent: deterministic Bluetooth Classic enumeration."
+    description: "Deterministic Bluetooth Classic enumeration."
   - name: radio.ble
-    description: "BluetoothLEView equivalent: Bluetooth Low Energy (BLE) advertisement, RSSI, service UUID, and manufacturer data scanner."
+    description: "Bluetooth Low Energy (BLE) advertisement, RSSI, service UUID, and manufacturer data scanner."
   # Mutating ActionCommands (13, policy-gated)
   - name: sockets.ports.close
     description: "Terminate an active IPv4 TCP connection using SetTcpEntry (MIB_TCP_STATE_DELETE_TCB) (privileged mutating, policy-gated)."

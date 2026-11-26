@@ -62,7 +62,7 @@ pub fn lookup_oui(mac: &MacAddr) -> Option<&'static str> {
         .map(|(_, vendor)| *vendor)
 }
 
-/// Format the `VendorOUI` column value consistently for `IPNeighborsView`.
+/// Format the `VendorOUI` column value consistently for `sockets.neighbors`.
 pub fn format_vendor_oui(mac: &MacAddr) -> String {
     let oui = mac.oui_hex();
     if let Some(vendor) = lookup_oui(mac) {

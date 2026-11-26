@@ -18,7 +18,7 @@ use crate::whois::{
 };
 
 pub const TOOL_ID: &str = "osint.whosip";
-pub const DESCRIPTION: &str = "WhosIP equivalent: IP WHOIS/RDAP resolver with referral chasing and ASN mapping.";
+pub const DESCRIPTION: &str = "IP WHOIS/RDAP resolver with referral chasing and ASN mapping.";
 pub const MAX_REFERRAL_HOPS: usize = 6;
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -36,7 +36,7 @@ pub struct WhosipRecord {
 pub fn schema() -> TableSchema {
     TableSchema::new(
         TOOL_ID,
-        "WhosIP — IP WHOIS & Referral Chasing",
+        "IP WHOIS & Referral Chasing",
         vec![
             ColumnDef::new("IP", "IP", ColumnType::IpAddr).with_width_hint(140),
             ColumnDef::new("ASN", "ASN", ColumnType::Text).with_width_hint(100),

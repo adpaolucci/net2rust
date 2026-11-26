@@ -253,14 +253,14 @@ pub struct ResolveRecord {
     pub duration_ms: u64,
 }
 
-pub struct FastResolverProvider {
+pub struct BatchResolverProvider {
     ctx: NetContext,
     queries: Vec<ResolveInput>,
     custom_queries: bool,
     dns: Arc<dyn DnsBackend>,
 }
 
-impl FastResolverProvider {
+impl BatchResolverProvider {
     pub fn new(ctx: NetContext) -> Self {
         Self {
             ctx,
@@ -293,7 +293,7 @@ impl FastResolverProvider {
     pub fn schema_def() -> TableSchema {
         TableSchema::new(
             "lan.resolve",
-            "FastResolver — Parallel DNS & MAC OUI Resolver",
+            "Parallel DNS & MAC OUI Resolver",
             vec![
                 ColumnDef::new("query", "Input Query", ColumnType::Text).with_width_hint(180),
                 ColumnDef::new("ip", "Resolved IP", ColumnType::IpAddr).with_width_hint(130),
@@ -396,13 +396,13 @@ impl FastResolverProvider {
     }
 }
 
-impl TableProvider for FastResolverProvider {
+impl TableProvider for BatchResolverProvider {
     fn tool_id(&self) -> &'static str {
         "lan.resolve"
     }
 
     fn description(&self) -> &'static str {
-        "Resolve hostnames, IP addresses, and MAC OUI vendors in parallel (FastResolver)"
+        "Resolve hostnames, IP addresses, and MAC OUI vendors in parallel"
     }
 
     fn schema(&self) -> TableSchema {
@@ -480,7 +480,7 @@ mod tests {
 
     #[test]
     fn test_fast_resolver_with_mock_dns_and_oui() {
-        let provider = FastResolverProvider::new(NetContext::live())
+        let provider = BatchResolverProvider::new(NetContext::live())
             .with_backend(Arc::new(MockDnsBackend))
             .with_queries(vec![
                 ResolveInput {
@@ -534,7 +534,7 @@ mod tests {
         assert_eq!(mac_only.cells[5], CellValue::Text("Resolved".into()));
 
         // Custom 2-item queries starting with 127.0.0.1 under offline context still use custom queries.
-        let custom_offline = FastResolverProvider::new(NetContext::offline(Default::default()))
+        let custom_offline = BatchResolverProvider::new(NetContext::offline(Default::default()))
             .with_backend(Arc::new(MockDnsBackend))
             .with_queries(vec![
                 ResolveInput {

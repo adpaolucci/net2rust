@@ -84,7 +84,7 @@ pub struct AdapterSnapshot {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct AdapterWatchRow {
+pub struct AdapterTelemetryRow {
     pub adapter_name: String,
     pub description: String,
     pub media_state: String,
@@ -98,7 +98,7 @@ pub struct AdapterWatchRow {
 }
 
 /// Compute per-adapter Rx/Tx byte-per-second rates between consecutive `MIB_IF_TABLE2` snapshots.
-pub fn diff_adapters(prev: Option<&AdapterSnapshot>, curr: &AdapterSnapshot) -> Vec<AdapterWatchRow> {
+pub fn diff_adapters(prev: Option<&AdapterSnapshot>, curr: &AdapterSnapshot) -> Vec<AdapterTelemetryRow> {
     let elapsed_secs = prev.and_then(|p| {
         if curr.captured_at_ns > p.captured_at_ns {
             Some((curr.captured_at_ns - p.captured_at_ns) as f64 / 1_000_000_000.0)
@@ -122,7 +122,7 @@ pub fn diff_adapters(prev: Option<&AdapterSnapshot>, curr: &AdapterSnapshot) -> 
                 _ => (None, None),
             };
 
-            AdapterWatchRow {
+            AdapterTelemetryRow {
                 adapter_name: row.adapter_name.clone(),
                 description: row.description.clone(),
                 media_state: row.media_state.clone(),

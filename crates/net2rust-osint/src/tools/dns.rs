@@ -21,7 +21,7 @@ use crate::whois::normalize_domain;
 
 pub const TOOL_ID: &str = "osint.dns";
 pub const DESCRIPTION: &str =
-    "DNSDataView equivalent: direct DNS A, AAAA, MX, NS, TXT, SOA, CNAME, PTR, SRV, CAA resolver.";
+    "Direct DNS A, AAAA, MX, NS, TXT, SOA, CNAME, PTR, SRV, CAA resolver.";
 pub const DEFAULT_DNS_SERVER: &str = "1.1.1.1:53";
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -39,7 +39,7 @@ pub struct DnsRowRecord {
 pub fn schema() -> TableSchema {
     TableSchema::new(
         TOOL_ID,
-        "DNSDataView — Pure-Rust RFC 1035 DNS Resolver",
+        "RFC 1035 DNS Record Resolver",
         vec![
             ColumnDef::new("Domain", "Domain", ColumnType::Text).with_width_hint(180),
             ColumnDef::new("RecordType", "Record Type", ColumnType::Text).with_width_hint(90),

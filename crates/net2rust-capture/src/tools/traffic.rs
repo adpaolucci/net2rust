@@ -1,4 +1,4 @@
-//! `capture.traffic` (`NetworkTrafficView`) TableProvider.
+//! `capture.traffic` TableProvider.
 
 use std::collections::BTreeMap;
 
@@ -46,7 +46,7 @@ struct FlowStats {
 fn build_schema() -> TableSchema {
     TableSchema::new(
         "capture.traffic",
-        "NetworkTrafficView — Aggregated Flows",
+        "Aggregated Traffic Flows",
         vec![
             ColumnDef::new("ethernet_type", "EthernetType", ColumnType::Text).with_width_hint(100),
             ColumnDef::new("protocol", "Protocol", ColumnType::Text).with_width_hint(80),
@@ -69,7 +69,7 @@ impl TableProvider for TrafficProvider {
     }
 
     fn description(&self) -> &'static str {
-        "NetworkTrafficView — aggregated traffic flows by protocol, endpoint, port, and byte volume"
+        "Aggregated traffic flows by protocol, endpoint, port, and byte volume"
     }
 
     fn schema(&self) -> TableSchema {

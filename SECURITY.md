@@ -17,7 +17,7 @@
 2. **Zero DLL Injection or API Hooking**:
    - `net2rust` excludes `SocketSniff` Winsock DLL injection and all `CreateRemoteThread` / `NtCreateThreadEx` / IAT hooking mechanisms. Live packet and socket monitoring uses Windows Event Tracing (`Microsoft-Windows-NDIS-PacketCapture`, `Microsoft-Windows-Kernel-Network`, `Microsoft-Windows-DNS-Client`, `Microsoft-Windows-TCPIP`) and optional dynamic `wpcap.dll` loading.
 3. **Zero Retired Legacy Protocols/Tools**:
-   - None of the 39 retired legacy NirSoft utilities (IE/ActiveX/Flash/RTMP/Win9x/legacy IM/FTP password tools) are included.
+   - None of the 39 retired legacy utilities (IE/ActiveX/Flash/RTMP/Win9x/legacy IM/FTP password tools) are included.
 4. **MCP Policy Gates & Dry-Run Guards**:
    - All 55 `TableProvider` views are strictly read-only. Mutating `ActionCommand`s (close socket, route add/delete, Wake-on-LAN, close SMB file, set DNS, switch network profile, manage WLAN profile, hosted network start/stop) are blocked by default in `net2rust-mcp` (`PolicyMode::ReadOnlyOnly`, JSON-RPC `-32003`) unless explicitly enabled with `--allow-mutating` and `confirm_destructive: true`, and honor `dry_run`.
 

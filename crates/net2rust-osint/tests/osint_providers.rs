@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use guap_table::{CellValue, CompareOp, FilterExpr, GetNirQuery, TableQuery};
+use guap_table::{CellValue, CompareOp, FilterExpr, GuapQuery, TableQuery};
 use net2rust_core::{DomainCrateExport, NetContext, OfflineConfig, ToolCategory};
 use net2rust_osint::{OsintDomain, actions, providers, tool_descriptors};
 
@@ -96,7 +96,7 @@ fn test_all_10_providers_filter_sort_projection_and_pagination() {
     assert_eq!(ipnet_data.rows[0].cells[1], CellValue::Text("Google LLC".into()));
 
     // 2. osint.whosip
-    let whosip_q = GetNirQuery {
+    let whosip_q = GuapQuery {
         filter_expr: Some("IP = 1.1.1.1".into()),
         ..Default::default()
     };
@@ -105,7 +105,7 @@ fn test_all_10_providers_filter_sort_projection_and_pagination() {
     assert_eq!(whosip_data.rows[0].cells[5], CellValue::Text("APNIC".into()));
 
     // 3. osint.ipoffline
-    let ipoff_q = GetNirQuery {
+    let ipoff_q = GuapQuery {
         filter_expr: Some("IPAddress = \"8.8.8.8,193.0.0.1\"".into()),
         ..Default::default()
     };
@@ -115,7 +115,7 @@ fn test_all_10_providers_filter_sort_projection_and_pagination() {
     assert_eq!(ipoff_data.rows[1].cells[1], CellValue::Text("NL".into()));
 
     // 4. osint.whois-domain
-    let wdom_q = GetNirQuery {
+    let wdom_q = GuapQuery {
         filter_expr: Some("Domain = example.co.uk".into()),
         ..Default::default()
     };
@@ -124,7 +124,7 @@ fn test_all_10_providers_filter_sort_projection_and_pagination() {
     assert!(wdom_data.rows[0].cells[1].to_string().contains("Nominet"));
 
     // 5. osint.whoiscl
-    let wcl_q = GetNirQuery {
+    let wcl_q = GuapQuery {
         filter_expr: Some("Query = \"8.8.8.8,example.com\"".into()),
         ..Default::default()
     };
@@ -132,7 +132,7 @@ fn test_all_10_providers_filter_sort_projection_and_pagination() {
     assert_eq!(wcl_data.rows.len(), 2);
 
     // 6. osint.dns (directive Domain + preserved RecordType filter!)
-    let dns_q = GetNirQuery {
+    let dns_q = GuapQuery {
         filter_expr: Some("Domain = example.com AND RecordType = MX".into()),
         ..Default::default()
     };
@@ -142,7 +142,7 @@ fn test_all_10_providers_filter_sort_projection_and_pagination() {
     assert_eq!(dns_data.rows[0].cells[4], CellValue::Uint(10));
 
     // 7. osint.hosting
-    let host_q = GetNirQuery {
+    let host_q = GuapQuery {
         filter_expr: Some("Domain = example.com".into()),
         ..Default::default()
     };
@@ -151,7 +151,7 @@ fn test_all_10_providers_filter_sort_projection_and_pagination() {
     assert_eq!(host_data.rows[0].cells[1], CellValue::Text("93.184.216.34".into()));
 
     // 8. osint.oui (directive MACPrefix normalized from full MAC -> 24-bit prefix!)
-    let oui_q = GetNirQuery {
+    let oui_q = GuapQuery {
         filter_expr: Some("MACPrefix = \"00:50:56:aa:bb:cc\"".into()),
         ..Default::default()
     };
@@ -172,7 +172,7 @@ fn test_all_10_providers_filter_sort_projection_and_pagination() {
     assert!(paged.total_rows > 10);
 
     // 9. osint.set-dns
-    let sdns_q = GetNirQuery {
+    let sdns_q = GuapQuery {
         filter_expr: Some("AdapterName = Ethernet".into()),
         ..Default::default()
     };
@@ -180,7 +180,7 @@ fn test_all_10_providers_filter_sort_projection_and_pagination() {
     assert_eq!(sdns_data.rows.len(), 1);
 
     // 10. osint.net-profiles
-    let nprof_q = GetNirQuery {
+    let nprof_q = GuapQuery {
         filter_expr: Some("Connected = true".into()),
         ..Default::default()
     };
@@ -221,7 +221,7 @@ fn test_offline_config_fixture_dir_and_db_path_overrides() {
     let provs = providers(&ctx);
     let by_id = |id: &str| provs.iter().find(|p| p.tool_id() == id).unwrap().as_ref();
 
-    let geo_res = GetNirQuery {
+    let geo_res = GuapQuery {
         filter_expr: Some("IPAddress = 198.51.100.70".into()),
         ..Default::default()
     }
@@ -230,7 +230,7 @@ fn test_offline_config_fixture_dir_and_db_path_overrides() {
     assert_eq!(geo_res.rows[0].cells[1], CellValue::Text("JP".into()));
     assert_eq!(geo_res.rows[0].cells[4], CellValue::Uint(64500));
 
-    let oui_res = GetNirQuery {
+    let oui_res = GuapQuery {
         filter_expr: Some("MACPrefix = \"de:ad:be:01:02:03\"".into()),
         ..Default::default()
     }

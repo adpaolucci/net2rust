@@ -15,12 +15,12 @@ use crate::whois::{IpNetRecord, parse_rdap_ip, parse_whois_ip, rir_whois_query_s
 
 pub const TOOL_ID: &str = "osint.ipnet";
 pub const DESCRIPTION: &str =
-    "IPNetInfo equivalent: RIR WHOIS (TCP 43) and RDAP IP block, org, and abuse contact lookup.";
+    "RIR WHOIS (TCP 43) and RDAP IP block, org, and abuse contact lookup.";
 
 pub fn schema() -> TableSchema {
     TableSchema::new(
         TOOL_ID,
-        "IPNetInfo — RIR WHOIS / RDAP IP Ownership",
+        "RIR WHOIS / RDAP IP Ownership",
         vec![
             ColumnDef::new("IPAddress", "IP Address", ColumnType::IpAddr).with_width_hint(140),
             ColumnDef::new("NetRange", "Net Range", ColumnType::Text).with_width_hint(200),

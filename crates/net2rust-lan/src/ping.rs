@@ -460,7 +460,7 @@ pub fn aggregate_ping_probes(
     }
 }
 
-pub struct PingInfoViewProvider {
+pub struct PingMonitorProvider {
     ctx: NetContext,
     targets: Vec<PingTargetSpec>,
     custom_targets: bool,
@@ -468,7 +468,7 @@ pub struct PingInfoViewProvider {
     dns: Arc<dyn DnsBackend>,
 }
 
-impl PingInfoViewProvider {
+impl PingMonitorProvider {
     pub fn new(ctx: NetContext) -> Self {
         Self {
             ctx,
@@ -505,7 +505,7 @@ impl PingInfoViewProvider {
     pub fn schema_def() -> TableSchema {
         TableSchema::new(
             "lan.ping",
-            "PingInfoView — Ping Monitor",
+            "Multi-Host Ping Monitor",
             vec![
                 ColumnDef::new("host", "Host", ColumnType::Text).with_width_hint(160),
                 ColumnDef::new("ip", "IP Address", ColumnType::IpAddr).with_width_hint(130),
@@ -618,13 +618,13 @@ impl PingInfoViewProvider {
     }
 }
 
-impl TableProvider for PingInfoViewProvider {
+impl TableProvider for PingMonitorProvider {
     fn tool_id(&self) -> &'static str {
         "lan.ping"
     }
 
     fn description(&self) -> &'static str {
-        "Monitor host reachability and RTT statistics via ICMP/ICMPv6 or TCP connect (PingInfoView)"
+        "Monitor host reachability and RTT statistics via ICMP/ICMPv6 or TCP connect"
     }
 
     fn schema(&self) -> TableSchema {
@@ -778,7 +778,7 @@ mod tests {
         assert!((summary.loss_pct - 33.333333).abs() < 0.01);
 
         // Provider with MockPingBackend tests ICMP success + PermissionDenied->TCP fallback + timeout
-        let provider = PingInfoViewProvider::new(NetContext::live())
+        let provider = PingMonitorProvider::new(NetContext::live())
             .with_backends(Arc::new(MockPingBackend), Arc::new(MockDns))
             .with_targets(vec![
                 PingTargetSpec {
@@ -806,7 +806,7 @@ mod tests {
         assert_eq!(data.rows[2].cells[4], CellValue::Text("Timed Out".into()));
 
         // Custom targets starting with 127.0.0.1 (len 2) bypass default fixture shortcut.
-        let custom_offline = PingInfoViewProvider::new(NetContext::offline(Default::default()))
+        let custom_offline = PingMonitorProvider::new(NetContext::offline(Default::default()))
             .with_backends(Arc::new(MockPingBackend), Arc::new(MockDns))
             .with_targets(vec![
                 PingTargetSpec {

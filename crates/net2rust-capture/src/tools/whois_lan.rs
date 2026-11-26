@@ -1,4 +1,4 @@
-//! `capture.whois-lan` (`WhoIsConnectedSniffer`) TableProvider.
+//! `capture.whois-lan` TableProvider.
 
 use guap_table::{
     CellValue, ColumnDef, ColumnType, Row, SortDirection, TableData, TableError, TableProvider, TableQuery, TableSchema,
@@ -23,7 +23,7 @@ impl WhoisLanProvider {
 fn build_schema() -> TableSchema {
     TableSchema::new(
         "capture.whois-lan",
-        "WhoIsConnectedSniffer — Passive LAN Hosts",
+        "Passive LAN Host Discovery",
         vec![
             ColumnDef::new("ip_address", "IPAddress", ColumnType::IpAddr).with_width_hint(140),
             ColumnDef::new("mac_address", "MACAddress", ColumnType::MacAddr).with_width_hint(140),
@@ -44,7 +44,7 @@ impl TableProvider for WhoisLanProvider {
     }
 
     fn description(&self) -> &'static str {
-        "WhoIsConnectedSniffer — passive ARP/DHCP/mDNS/NetBIOS/SSDP LAN host inventory with OUI lookup"
+        "Passive ARP/DHCP/mDNS/NetBIOS/SSDP LAN host inventory with OUI lookup"
     }
 
     fn schema(&self) -> TableSchema {

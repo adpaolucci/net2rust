@@ -21,7 +21,7 @@ pub fn all_tool_descriptors() -> Vec<ToolDescriptor> {
             id: TOOL_ID_PORTS,
             category: ToolCategory::Sockets,
             subcommand: "ports",
-            nirsoft_name: "CurrPorts",
+            display_name: "Active TCP/UDP Ports",
             description: "List active TCP/UDP listening and connected sockets with process metadata",
             read_only: true,
             has_mutating_action: true,
@@ -30,7 +30,7 @@ pub fn all_tool_descriptors() -> Vec<ToolDescriptor> {
             id: TOOL_ID_TCPLOG,
             category: ToolCategory::Sockets,
             subcommand: "tcplog",
-            nirsoft_name: "TcpLogView",
+            display_name: "TCP Connection Log",
             description: "Track TCP open, close, and listen state transitions via snapshot diffing and ETW",
             read_only: true,
             has_mutating_action: false,
@@ -39,7 +39,7 @@ pub fn all_tool_descriptors() -> Vec<ToolDescriptor> {
             id: TOOL_ID_LIVE,
             category: ToolCategory::Sockets,
             subcommand: "live",
-            nirsoft_name: "LiveTcpUdpWatch",
+            display_name: "Live TCP/UDP Monitor",
             description: "Observe live TCP/UDP byte and packet counters per socket tuple via Kernel-Network ETW",
             read_only: true,
             has_mutating_action: false,
@@ -48,7 +48,7 @@ pub fn all_tool_descriptors() -> Vec<ToolDescriptor> {
             id: TOOL_ID_APP_NET,
             category: ToolCategory::Sockets,
             subcommand: "app-net",
-            nirsoft_name: "AppNetworkCounter",
+            display_name: "Application Network Counters",
             description: "Aggregate TCP/UDP sent and received traffic and throughput per process",
             read_only: true,
             has_mutating_action: false,
@@ -57,7 +57,7 @@ pub fn all_tool_descriptors() -> Vec<ToolDescriptor> {
             id: TOOL_ID_PROC_TCP,
             category: ToolCategory::Sockets,
             subcommand: "proc-tcp",
-            nirsoft_name: "ProcessTCPSummary",
+            display_name: "Process TCP/UDP Summary",
             description: "Summarize TCP connection states, UDP endpoints, and EStats byte totals per PID",
             read_only: true,
             has_mutating_action: false,
@@ -66,7 +66,7 @@ pub fn all_tool_descriptors() -> Vec<ToolDescriptor> {
             id: TOOL_ID_TCP_ERRORS,
             category: ToolCategory::Sockets,
             subcommand: "tcp-errors",
-            nirsoft_name: "TCPConnectProblemView",
+            display_name: "TCP Connect Problems",
             description: "Monitor TCP connection failures, timeouts, resets, and retransmissions via TCPIP ETW",
             read_only: true,
             has_mutating_action: false,
@@ -75,7 +75,7 @@ pub fn all_tool_descriptors() -> Vec<ToolDescriptor> {
             id: TOOL_ID_DNS_LOG,
             category: ToolCategory::Sockets,
             subcommand: "dns-log",
-            nirsoft_name: "DNSLookupView",
+            display_name: "DNS Lookup Log",
             description: "Trace DNS client queries, responses, latencies, and local DNS resolver cache",
             read_only: true,
             has_mutating_action: false,
@@ -84,7 +84,7 @@ pub fn all_tool_descriptors() -> Vec<ToolDescriptor> {
             id: TOOL_ID_COUNTERS,
             category: ToolCategory::Sockets,
             subcommand: "counters",
-            nirsoft_name: "NetworkCountersWatch",
+            display_name: "Protocol Stack Counters",
             description: "Inspect IPv4/IPv6, TCP, UDP, and ICMP protocol stack counters and per-second rates",
             read_only: true,
             has_mutating_action: false,
@@ -93,7 +93,7 @@ pub fn all_tool_descriptors() -> Vec<ToolDescriptor> {
             id: TOOL_ID_ADAPTER_WATCH,
             category: ToolCategory::Sockets,
             subcommand: "adapter-watch",
-            nirsoft_name: "AdapterWatch",
+            display_name: "Network Adapter Monitor",
             description: "Monitor per-adapter link speed, byte totals, Rx/Tx throughput, errors, and discards",
             read_only: true,
             has_mutating_action: false,
@@ -102,7 +102,7 @@ pub fn all_tool_descriptors() -> Vec<ToolDescriptor> {
             id: TOOL_ID_INTERFACES,
             category: ToolCategory::Sockets,
             subcommand: "interfaces",
-            nirsoft_name: "NetworkInterfacesView",
+            display_name: "Network Interfaces",
             description: "Enumerate network interface hardware, IP, gateway, DNS, and DHCP configuration",
             read_only: true,
             has_mutating_action: false,
@@ -111,7 +111,7 @@ pub fn all_tool_descriptors() -> Vec<ToolDescriptor> {
             id: TOOL_ID_ROUTES,
             category: ToolCategory::Sockets,
             subcommand: "routes",
-            nirsoft_name: "NetRouteView",
+            display_name: "IP Routing Table",
             description: "Inspect and manage IPv4/IPv6 kernel routing table entries",
             read_only: true,
             has_mutating_action: true,
@@ -120,7 +120,7 @@ pub fn all_tool_descriptors() -> Vec<ToolDescriptor> {
             id: TOOL_ID_NEIGHBORS,
             category: ToolCategory::Sockets,
             subcommand: "neighbors",
-            nirsoft_name: "IPNeighborsView",
+            display_name: "IP Neighbors (ARP/NDP)",
             description: "Inspect ARP and IPv6 NDP neighbor cache entries with OUI vendor resolution",
             read_only: true,
             has_mutating_action: false,
@@ -129,7 +129,7 @@ pub fn all_tool_descriptors() -> Vec<ToolDescriptor> {
             id: TOOL_ID_PATHS,
             category: ToolCategory::Sockets,
             subcommand: "paths",
-            nirsoft_name: "IPPathTableView",
+            display_name: "IP Path Table",
             description: "Inspect IP path MTU, RTT mean/deviation, next-hop, and link speeds",
             read_only: true,
             has_mutating_action: false,
@@ -140,7 +140,7 @@ pub fn all_tool_descriptors() -> Vec<ToolDescriptor> {
 pub fn schema_ports() -> TableSchema {
     TableSchema::new(
         TOOL_ID_PORTS,
-        "Active TCP/UDP Ports (CurrPorts)",
+        "Active TCP/UDP Ports",
         vec![
             ColumnDef::new("process_name", "ProcessName", ColumnType::Text).with_width_hint(150),
             ColumnDef::new("pid", "PID", ColumnType::Uint).with_width_hint(75),
@@ -161,7 +161,7 @@ pub fn schema_ports() -> TableSchema {
 pub fn schema_tcplog() -> TableSchema {
     TableSchema::new(
         TOOL_ID_TCPLOG,
-        "TCP Connection Log (TcpLogView)",
+        "TCP Connection Log",
         vec![
             ColumnDef::new("event_time", "EventTime", ColumnType::Timestamp).with_width_hint(175),
             ColumnDef::new("event_type", "EventType", ColumnType::Text).with_width_hint(90),
@@ -180,7 +180,7 @@ pub fn schema_tcplog() -> TableSchema {
 pub fn schema_live() -> TableSchema {
     TableSchema::new(
         TOOL_ID_LIVE,
-        "Live TCP/UDP Watch (LiveTcpUdpWatch)",
+        "Live TCP/UDP Monitor",
         vec![
             ColumnDef::new("timestamp", "Timestamp", ColumnType::Timestamp).with_width_hint(175),
             ColumnDef::new("protocol", "Protocol", ColumnType::Text).with_width_hint(75),
@@ -202,7 +202,7 @@ pub fn schema_live() -> TableSchema {
 pub fn schema_app_net() -> TableSchema {
     TableSchema::new(
         TOOL_ID_APP_NET,
-        "Application Network Counter (AppNetworkCounter)",
+        "Application Network Counters",
         vec![
             ColumnDef::new("pid", "PID", ColumnType::Uint).with_width_hint(75),
             ColumnDef::new("process_name", "ProcessName", ColumnType::Text).with_width_hint(150),
@@ -221,7 +221,7 @@ pub fn schema_app_net() -> TableSchema {
 pub fn schema_proc_tcp() -> TableSchema {
     TableSchema::new(
         TOOL_ID_PROC_TCP,
-        "Process TCP/UDP Summary (ProcessTCPSummary)",
+        "Process TCP/UDP Summary",
         vec![
             ColumnDef::new("pid", "PID", ColumnType::Uint).with_width_hint(75),
             ColumnDef::new("process_name", "ProcessName", ColumnType::Text).with_width_hint(160),
@@ -239,7 +239,7 @@ pub fn schema_proc_tcp() -> TableSchema {
 pub fn schema_tcp_errors() -> TableSchema {
     TableSchema::new(
         TOOL_ID_TCP_ERRORS,
-        "TCP Connect Problems (TCPConnectProblemView)",
+        "TCP Connect Problems",
         vec![
             ColumnDef::new("timestamp", "Timestamp", ColumnType::Timestamp).with_width_hint(175),
             ColumnDef::new("pid", "PID", ColumnType::Uint).with_width_hint(75),
@@ -257,7 +257,7 @@ pub fn schema_tcp_errors() -> TableSchema {
 pub fn schema_dns_log() -> TableSchema {
     TableSchema::new(
         TOOL_ID_DNS_LOG,
-        "DNS Lookup View (DNSLookupView)",
+        "DNS Lookup Log",
         vec![
             ColumnDef::new("timestamp", "Timestamp", ColumnType::Timestamp).with_width_hint(175),
             ColumnDef::new("pid", "PID", ColumnType::Uint).with_width_hint(75),
@@ -275,7 +275,7 @@ pub fn schema_dns_log() -> TableSchema {
 pub fn schema_counters() -> TableSchema {
     TableSchema::new(
         TOOL_ID_COUNTERS,
-        "Protocol Stack Counters (NetworkCountersWatch)",
+        "Protocol Stack Counters",
         vec![
             ColumnDef::new("counter_group", "CounterGroup", ColumnType::Text).with_width_hint(110),
             ColumnDef::new("metric_name", "MetricName", ColumnType::Text).with_width_hint(210),
@@ -289,7 +289,7 @@ pub fn schema_counters() -> TableSchema {
 pub fn schema_adapter_watch() -> TableSchema {
     TableSchema::new(
         TOOL_ID_ADAPTER_WATCH,
-        "Network Adapter Watch (AdapterWatch)",
+        "Network Adapter Monitor",
         vec![
             ColumnDef::new("adapter_name", "AdapterName", ColumnType::Text).with_width_hint(160),
             ColumnDef::new("description", "Description", ColumnType::Text).with_width_hint(240),
@@ -309,7 +309,7 @@ pub fn schema_adapter_watch() -> TableSchema {
 pub fn schema_interfaces() -> TableSchema {
     TableSchema::new(
         TOOL_ID_INTERFACES,
-        "Network Interfaces (NetworkInterfacesView)",
+        "Network Interfaces",
         vec![
             ColumnDef::new("interface_name", "InterfaceName", ColumnType::Text).with_width_hint(160),
             ColumnDef::new("description", "Description", ColumnType::Text).with_width_hint(230),
@@ -331,7 +331,7 @@ pub fn schema_interfaces() -> TableSchema {
 pub fn schema_routes() -> TableSchema {
     TableSchema::new(
         TOOL_ID_ROUTES,
-        "IP Routing Table (NetRouteView)",
+        "IP Routing Table",
         vec![
             ColumnDef::new("destination", "Destination", ColumnType::IpAddr).with_width_hint(160),
             ColumnDef::new("prefix_length", "PrefixLength", ColumnType::Uint).with_width_hint(95),
@@ -349,7 +349,7 @@ pub fn schema_routes() -> TableSchema {
 pub fn schema_neighbors() -> TableSchema {
     TableSchema::new(
         TOOL_ID_NEIGHBORS,
-        "IP Neighbors (IPNeighborsView)",
+        "IP Neighbors (ARP/NDP)",
         vec![
             ColumnDef::new("interface_index", "InterfaceIndex", ColumnType::Uint).with_width_hint(105),
             ColumnDef::new("ip_address", "IPAddress", ColumnType::IpAddr).with_width_hint(175),
@@ -365,7 +365,7 @@ pub fn schema_neighbors() -> TableSchema {
 pub fn schema_paths() -> TableSchema {
     TableSchema::new(
         TOOL_ID_PATHS,
-        "IP Path Table (IPPathTableView)",
+        "IP Path Table",
         vec![
             ColumnDef::new("source_ip", "SourceIP", ColumnType::IpAddr).with_width_hint(165),
             ColumnDef::new("destination_ip", "DestinationIP", ColumnType::IpAddr).with_width_hint(175),

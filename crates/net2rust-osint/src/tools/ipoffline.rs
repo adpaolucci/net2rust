@@ -10,12 +10,12 @@ use crate::geoip_db::OfflineIpDb;
 use crate::model::{plan_filter_query, split_target_list};
 
 pub const TOOL_ID: &str = "osint.ipoffline";
-pub const DESCRIPTION: &str = "IPInfoOffline equivalent: embedded offline IPv4/IPv6 CIDR to country and ASN lookup.";
+pub const DESCRIPTION: &str = "Embedded offline IPv4/IPv6 CIDR to country and ASN lookup.";
 
 pub fn schema() -> TableSchema {
     TableSchema::new(
         TOOL_ID,
-        "IPInfoOffline — Embedded GeoIP & ASN Lookup",
+        "Embedded GeoIP & ASN Lookup",
         vec![
             ColumnDef::new("IPAddress", "IP Address", ColumnType::IpAddr).with_width_hint(160),
             ColumnDef::new("CountryCode", "Country Code", ColumnType::Text).with_width_hint(90),

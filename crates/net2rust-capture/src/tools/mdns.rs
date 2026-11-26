@@ -1,4 +1,4 @@
-//! `capture.mdns` (`mDNSView`) TableProvider.
+//! `capture.mdns` TableProvider.
 
 use guap_table::{
     CellValue, ColumnDef, ColumnType, Row, SortDirection, TableData, TableError, TableProvider, TableQuery, TableSchema,
@@ -23,7 +23,7 @@ impl MdnsProvider {
 fn build_schema() -> TableSchema {
     TableSchema::new(
         "capture.mdns",
-        "mDNSView — Multicast DNS & DNS-SD Services",
+        "Multicast DNS & DNS-SD",
         vec![
             ColumnDef::new("timestamp", "Timestamp", ColumnType::Timestamp).with_width_hint(180),
             ColumnDef::new("service_name", "ServiceName", ColumnType::Text).with_width_hint(200),
@@ -44,7 +44,7 @@ impl TableProvider for MdnsProvider {
     }
 
     fn description(&self) -> &'static str {
-        "mDNSView — Multicast DNS (UDP 5353) and DNS-SD service discovery"
+        "Multicast DNS (UDP 5353) and DNS-SD service discovery"
     }
 
     fn schema(&self) -> TableSchema {

@@ -59,7 +59,7 @@ pub fn build_all_providers(ctx: &NetContext) -> Vec<Arc<dyn TableProvider>> {
         Arc::new(TcpErrorsProvider::new(ctx.clone())),
         Arc::new(DnsLogProvider::new(ctx.clone())),
         Arc::new(CountersProvider::new(ctx.clone())),
-        Arc::new(AdapterWatchProvider::new(ctx.clone())),
+        Arc::new(AdapterMonitorProvider::new(ctx.clone())),
         Arc::new(InterfacesProvider::new(ctx.clone())),
         Arc::new(RoutesProvider::new(ctx.clone())),
         Arc::new(NeighborsProvider::new(ctx.clone())),
@@ -67,7 +67,7 @@ pub fn build_all_providers(ctx: &NetContext) -> Vec<Arc<dyn TableProvider>> {
     ]
 }
 
-// 1. sockets.ports (CurrPorts)
+// 1. sockets.ports
 pub struct PortsProvider {
     ctx: NetContext,
 }
@@ -102,7 +102,7 @@ impl TableProvider for PortsProvider {
     }
 
     fn description(&self) -> &'static str {
-        "List active TCP/UDP listening and connected sockets with process metadata (CurrPorts)"
+        "List active TCP/UDP listening and connected sockets with process metadata"
     }
 
     fn schema(&self) -> TableSchema {
@@ -183,7 +183,7 @@ impl TableProvider for PortsProvider {
     }
 }
 
-// 2. sockets.tcplog (TcpLogView)
+// 2. sockets.tcplog
 pub struct TcpLogProvider {
     ctx: NetContext,
     diff_engine: Arc<Mutex<TcpDiffEngine>>,
@@ -284,7 +284,7 @@ impl TableProvider for TcpLogProvider {
     }
 
     fn description(&self) -> &'static str {
-        "Track TCP open, close, and listen state transitions via snapshot diffing and ETW (TcpLogView)"
+        "Track TCP open, close, and listen state transitions via snapshot diffing and ETW"
     }
 
     fn schema(&self) -> TableSchema {
@@ -318,7 +318,7 @@ impl TableProvider for TcpLogProvider {
     }
 }
 
-// 3. sockets.live (LiveTcpUdpWatch)
+// 3. sockets.live
 pub struct LiveWatchProvider {
     ctx: NetContext,
 }
@@ -335,7 +335,7 @@ impl TableProvider for LiveWatchProvider {
     }
 
     fn description(&self) -> &'static str {
-        "Observe live TCP/UDP byte and packet counters per socket tuple via Kernel-Network ETW (LiveTcpUdpWatch)"
+        "Observe live TCP/UDP byte and packet counters per socket tuple via Kernel-Network ETW"
     }
 
     fn schema(&self) -> TableSchema {
@@ -420,7 +420,7 @@ impl TableProvider for LiveWatchProvider {
     }
 }
 
-// 4. sockets.app-net (AppNetworkCounter)
+// 4. sockets.app-net
 pub struct AppNetProvider {
     ctx: NetContext,
 }
@@ -437,7 +437,7 @@ impl TableProvider for AppNetProvider {
     }
 
     fn description(&self) -> &'static str {
-        "Aggregate TCP/UDP sent and received traffic and throughput per process (AppNetworkCounter)"
+        "Aggregate TCP/UDP sent and received traffic and throughput per process"
     }
 
     fn schema(&self) -> TableSchema {
@@ -462,7 +462,8 @@ impl TableProvider for AppNetProvider {
                 #[cfg(not(windows))]
                 {
                     return Err(
-                        NetError::NotSupported("live AppNetworkCounter ETW requires Windows".to_string()).into(),
+                        NetError::NotSupported("live application network counter ETW requires Windows".to_string())
+                            .into(),
                     );
                 }
             }
@@ -530,7 +531,7 @@ impl TableProvider for AppNetProvider {
     }
 }
 
-// 5. sockets.proc-tcp (ProcessTCPSummary)
+// 5. sockets.proc-tcp
 pub struct ProcTcpProvider {
     ctx: NetContext,
 }
@@ -551,7 +552,7 @@ impl ProcTcpProvider {
                 #[cfg(not(windows))]
                 {
                     Err(NetError::NotSupported(
-                        "live ProcessTCPSummary requires Windows".to_string(),
+                        "live process TCP/UDP summary requires Windows".to_string(),
                     ))
                 }
             }
@@ -576,7 +577,7 @@ impl TableProvider for ProcTcpProvider {
     }
 
     fn description(&self) -> &'static str {
-        "Summarize TCP connection states, UDP endpoints, and EStats byte totals per PID (ProcessTCPSummary)"
+        "Summarize TCP connection states, UDP endpoints, and EStats byte totals per PID"
     }
 
     fn schema(&self) -> TableSchema {
@@ -639,7 +640,7 @@ impl TableProvider for ProcTcpProvider {
     }
 }
 
-// 6. sockets.tcp-errors (TCPConnectProblemView)
+// 6. sockets.tcp-errors
 pub struct TcpErrorsProvider {
     ctx: NetContext,
 }
@@ -656,7 +657,7 @@ impl TableProvider for TcpErrorsProvider {
     }
 
     fn description(&self) -> &'static str {
-        "Monitor TCP connection failures, timeouts, resets, and retransmissions via TCPIP ETW (TCPConnectProblemView)"
+        "Monitor TCP connection failures, timeouts, resets, and retransmissions via TCPIP ETW"
     }
 
     fn schema(&self) -> TableSchema {
@@ -737,7 +738,7 @@ impl TableProvider for TcpErrorsProvider {
     }
 }
 
-// 7. sockets.dns-log (DNSLookupView)
+// 7. sockets.dns-log
 pub struct DnsLogProvider {
     ctx: NetContext,
 }
@@ -754,7 +755,7 @@ impl TableProvider for DnsLogProvider {
     }
 
     fn description(&self) -> &'static str {
-        "Trace DNS client queries, responses, latencies, and local DNS resolver cache (DNSLookupView)"
+        "Trace DNS client queries, responses, latencies, and local DNS resolver cache"
     }
 
     fn schema(&self) -> TableSchema {
@@ -848,7 +849,7 @@ impl TableProvider for DnsLogProvider {
     }
 }
 
-// 8. sockets.counters (NetworkCountersWatch)
+// 8. sockets.counters
 pub struct CountersProvider {
     ctx: NetContext,
     start: Instant,
@@ -871,7 +872,7 @@ impl TableProvider for CountersProvider {
     }
 
     fn description(&self) -> &'static str {
-        "Inspect IPv4/IPv6, TCP, UDP, and ICMP protocol stack counters and per-second rates (NetworkCountersWatch)"
+        "Inspect IPv4/IPv6, TCP, UDP, and ICMP protocol stack counters and per-second rates"
     }
 
     fn schema(&self) -> TableSchema {
@@ -926,14 +927,14 @@ impl TableProvider for CountersProvider {
     }
 }
 
-// 9. sockets.adapter-watch (AdapterWatch)
-pub struct AdapterWatchProvider {
+// 9. sockets.adapter-watch
+pub struct AdapterMonitorProvider {
     ctx: NetContext,
     start: Instant,
     prev: Arc<Mutex<Option<AdapterSnapshot>>>,
 }
 
-impl AdapterWatchProvider {
+impl AdapterMonitorProvider {
     pub fn new(ctx: NetContext) -> Self {
         Self {
             ctx,
@@ -943,13 +944,13 @@ impl AdapterWatchProvider {
     }
 }
 
-impl TableProvider for AdapterWatchProvider {
+impl TableProvider for AdapterMonitorProvider {
     fn tool_id(&self) -> &'static str {
         schema::TOOL_ID_ADAPTER_WATCH
     }
 
     fn description(&self) -> &'static str {
-        "Monitor per-adapter link speed, byte totals, Rx/Tx throughput, errors, and discards (AdapterWatch)"
+        "Monitor per-adapter link speed, byte totals, Rx/Tx throughput, errors, and discards"
     }
 
     fn schema(&self) -> TableSchema {
@@ -982,7 +983,10 @@ impl TableProvider for AdapterWatchProvider {
                 #[cfg(not(windows))]
                 {
                     let _ = (&self.start, &self.prev, std::mem::size_of::<RawAdapterRow>());
-                    return Err(NetError::NotSupported("live AdapterWatch requires Windows".to_string()).into());
+                    return Err(NetError::NotSupported(
+                        "live network adapter monitor requires Windows".to_string(),
+                    )
+                    .into());
                 }
             }
         };
@@ -1014,7 +1018,7 @@ impl TableProvider for AdapterWatchProvider {
     }
 }
 
-// 10. sockets.interfaces (NetworkInterfacesView)
+// 10. sockets.interfaces
 pub struct InterfacesProvider {
     ctx: NetContext,
 }
@@ -1049,7 +1053,7 @@ impl TableProvider for InterfacesProvider {
     }
 
     fn description(&self) -> &'static str {
-        "Enumerate network interface hardware, IP, gateway, DNS, and DHCP configuration (NetworkInterfacesView)"
+        "Enumerate network interface hardware, IP, gateway, DNS, and DHCP configuration"
     }
 
     fn schema(&self) -> TableSchema {
@@ -1095,7 +1099,7 @@ impl TableProvider for InterfacesProvider {
     }
 }
 
-// 11. sockets.routes (NetRouteView)
+// 11. sockets.routes
 pub struct RoutesProvider {
     ctx: NetContext,
 }
@@ -1130,7 +1134,7 @@ impl TableProvider for RoutesProvider {
     }
 
     fn description(&self) -> &'static str {
-        "Inspect and manage IPv4/IPv6 kernel routing table entries (NetRouteView)"
+        "Inspect and manage IPv4/IPv6 kernel routing table entries"
     }
 
     fn schema(&self) -> TableSchema {
@@ -1165,7 +1169,7 @@ impl TableProvider for RoutesProvider {
     }
 }
 
-// 12. sockets.neighbors (IPNeighborsView)
+// 12. sockets.neighbors
 pub struct NeighborsProvider {
     ctx: NetContext,
 }
@@ -1200,7 +1204,7 @@ impl TableProvider for NeighborsProvider {
     }
 
     fn description(&self) -> &'static str {
-        "Inspect ARP and IPv6 NDP neighbor cache entries with OUI vendor resolution (IPNeighborsView)"
+        "Inspect ARP and IPv6 NDP neighbor cache entries with OUI vendor resolution"
     }
 
     fn schema(&self) -> TableSchema {
@@ -1235,7 +1239,7 @@ impl TableProvider for NeighborsProvider {
     }
 }
 
-// 13. sockets.paths (IPPathTableView)
+// 13. sockets.paths
 pub struct PathsProvider {
     ctx: NetContext,
 }
@@ -1270,7 +1274,7 @@ impl TableProvider for PathsProvider {
     }
 
     fn description(&self) -> &'static str {
-        "Inspect IP path MTU, RTT mean/deviation, next-hop, and link speeds (IPPathTableView)"
+        "Inspect IP path MTU, RTT mean/deviation, next-hop, and link speeds"
     }
 
     fn schema(&self) -> TableSchema {

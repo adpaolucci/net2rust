@@ -590,13 +590,13 @@ mod win32_smb {
     }
 }
 
-pub struct NetResViewProvider {
+pub struct SmbShareProvider {
     ctx: NetContext,
     server: Option<String>,
     backend: Arc<dyn ShareBackend>,
 }
 
-impl NetResViewProvider {
+impl SmbShareProvider {
     pub fn new(ctx: NetContext) -> Self {
         Self {
             ctx,
@@ -618,7 +618,7 @@ impl NetResViewProvider {
     pub fn schema_def() -> TableSchema {
         TableSchema::new(
             "lan.shares",
-            "NetResView — SMB & WNet Shared Resources",
+            "SMB & WNet Shared Resources",
             vec![
                 ColumnDef::new("server", "Server", ColumnType::Text).with_width_hint(150),
                 ColumnDef::new("share_name", "Share Name", ColumnType::Text).with_width_hint(150),
@@ -656,13 +656,13 @@ impl NetResViewProvider {
     }
 }
 
-impl TableProvider for NetResViewProvider {
+impl TableProvider for SmbShareProvider {
     fn tool_id(&self) -> &'static str {
         "lan.shares"
     }
 
     fn description(&self) -> &'static str {
-        "Enumerate local SMB shares (NetShareEnum) and WNet network resources (NetResView)"
+        "Enumerate local SMB shares (NetShareEnum) and WNet network resources"
     }
 
     fn schema(&self) -> TableSchema {
@@ -711,13 +711,13 @@ impl TableProvider for NetResViewProvider {
     }
 }
 
-pub struct NetworkOpenedFilesProvider {
+pub struct SmbOpenFilesProvider {
     ctx: NetContext,
     server: Option<String>,
     backend: Arc<dyn OpenFilesBackend>,
 }
 
-impl NetworkOpenedFilesProvider {
+impl SmbOpenFilesProvider {
     pub fn new(ctx: NetContext) -> Self {
         Self {
             ctx,
@@ -739,7 +739,7 @@ impl NetworkOpenedFilesProvider {
     pub fn schema_def() -> TableSchema {
         TableSchema::new(
             "lan.openfiles",
-            "NetworkOpenedFiles — SMB Server Open Files",
+            "SMB Server Open Files",
             vec![
                 ColumnDef::new("file_id", "File ID", ColumnType::Uint).with_width_hint(90),
                 ColumnDef::new("pathname", "Pathname", ColumnType::Text).with_width_hint(280),
@@ -760,13 +760,13 @@ impl NetworkOpenedFilesProvider {
     }
 }
 
-impl TableProvider for NetworkOpenedFilesProvider {
+impl TableProvider for SmbOpenFilesProvider {
     fn tool_id(&self) -> &'static str {
         "lan.openfiles"
     }
 
     fn description(&self) -> &'static str {
-        "List files opened remotely on local or remote SMB servers via NetFileEnum (NetworkOpenedFiles)"
+        "List files opened remotely on local or remote SMB servers via NetFileEnum"
     }
 
     fn schema(&self) -> TableSchema {
@@ -1027,14 +1027,14 @@ mod tests {
 
     #[test]
     fn test_shares_and_openfiles_error_mappings() {
-        let shares = NetResViewProvider::new(NetContext::live())
+        let shares = SmbShareProvider::new(NetContext::live())
             .with_backend(Arc::new(MockSmbBackend { deny_open_files: false }));
         let data = shares.query(&TableQuery::default()).unwrap();
         assert_eq!(data.total_rows, 1);
         assert_eq!(data.rows[0].cells[4], CellValue::Null); // level-1 fallback omits local_path
 
         // PermissionDenied -> TableError::Provider for provider, McpToolError::ExecutionFailed (never -32003!) for action
-        let denied_provider = NetworkOpenedFilesProvider::new(NetContext::live())
+        let denied_provider = SmbOpenFilesProvider::new(NetContext::live())
             .with_backend(Arc::new(MockSmbBackend { deny_open_files: true }));
         assert!(matches!(
             denied_provider.query(&TableQuery::default()),

@@ -339,7 +339,7 @@ pub struct LanScanHostRecord {
     pub discovery_method: String,
 }
 
-pub struct LanIpScannerProvider {
+pub struct SubnetScannerProvider {
     ctx: NetContext,
     cidr: Option<CidrV4>,
     ports: Vec<u16>,
@@ -350,7 +350,7 @@ pub struct LanIpScannerProvider {
     tcp: Arc<dyn TcpProbeBackend>,
 }
 
-impl LanIpScannerProvider {
+impl SubnetScannerProvider {
     pub fn new(ctx: NetContext) -> Self {
         Self {
             ctx,
@@ -393,7 +393,7 @@ impl LanIpScannerProvider {
     pub fn schema_def() -> TableSchema {
         TableSchema::new(
             "lan.scan",
-            "LANIPScanner — Subnet Host & Port Scanner",
+            "Subnet Host & Port Scanner",
             vec![
                 ColumnDef::new("ip", "IP Address", ColumnType::IpAddr).with_width_hint(130),
                 ColumnDef::new("mac", "MAC Address", ColumnType::MacAddr).with_width_hint(150),
@@ -510,13 +510,13 @@ impl LanIpScannerProvider {
     }
 }
 
-impl TableProvider for LanIpScannerProvider {
+impl TableProvider for SubnetScannerProvider {
     fn tool_id(&self) -> &'static str {
         "lan.scan"
     }
 
     fn description(&self) -> &'static str {
-        "Scan IPv4 CIDR subnets via ARP, ICMP, NetBIOS, and TCP port probes (LANIPScanner)"
+        "Scan IPv4 CIDR subnets via ARP, ICMP, NetBIOS, and TCP port probes"
     }
 
     fn schema(&self) -> TableSchema {
@@ -593,7 +593,7 @@ struct TrackedDevice {
     adapter: String,
 }
 
-pub struct WirelessNetWatcherProvider {
+pub struct ArpWatcherProvider {
     ctx: NetContext,
     arp: Arc<dyn ArpBackend>,
     dns: Arc<dyn DnsBackend>,
@@ -601,7 +601,7 @@ pub struct WirelessNetWatcherProvider {
     sweep_subnet: bool,
 }
 
-impl WirelessNetWatcherProvider {
+impl ArpWatcherProvider {
     pub fn new(ctx: NetContext) -> Self {
         Self {
             ctx,
@@ -622,7 +622,7 @@ impl WirelessNetWatcherProvider {
     pub fn schema_def() -> TableSchema {
         TableSchema::new(
             "lan.wnetwatcher",
-            "Wireless Network Watcher — LAN Device Inventory",
+            "LAN Device ARP Inventory",
             vec![
                 ColumnDef::new("ip", "IP Address", ColumnType::IpAddr).with_width_hint(130),
                 ColumnDef::new("device_name", "Device Name", ColumnType::Text).with_width_hint(180),
@@ -741,13 +741,13 @@ impl WirelessNetWatcherProvider {
     }
 }
 
-impl TableProvider for WirelessNetWatcherProvider {
+impl TableProvider for ArpWatcherProvider {
     fn tool_id(&self) -> &'static str {
         "lan.wnetwatcher"
     }
 
     fn description(&self) -> &'static str {
-        "Inspect local LAN devices via ARP table, subnet SendARP sweep, and OUI/DNS lookup (Wireless Network Watcher)"
+        "Inspect local LAN devices via ARP table, subnet SendARP sweep, and OUI/DNS lookup"
     }
 
     fn schema(&self) -> TableSchema {
@@ -929,14 +929,14 @@ impl ConnectLogEngine {
     }
 }
 
-pub struct NetworkConnectLogProvider {
+pub struct ConnectLogProvider {
     ctx: NetContext,
     arp: Arc<dyn ArpBackend>,
     dns: Arc<dyn DnsBackend>,
     engine: Mutex<ConnectLogEngine>,
 }
 
-impl NetworkConnectLogProvider {
+impl ConnectLogProvider {
     pub fn new(ctx: NetContext) -> Self {
         Self {
             ctx,
@@ -955,7 +955,7 @@ impl NetworkConnectLogProvider {
     pub fn schema_def() -> TableSchema {
         TableSchema::new(
             "lan.connect-log",
-            "NetworkConnectLog — Host Arrival & Departure Log",
+            "LAN Host Arrival & Departure Log",
             vec![
                 ColumnDef::new("timestamp", "Event Time", ColumnType::Timestamp).with_width_hint(170),
                 ColumnDef::new("event", "Event", ColumnType::Text).with_width_hint(110),
@@ -997,13 +997,13 @@ impl NetworkConnectLogProvider {
     }
 }
 
-impl TableProvider for NetworkConnectLogProvider {
+impl TableProvider for ConnectLogProvider {
     fn tool_id(&self) -> &'static str {
         "lan.connect-log"
     }
 
     fn description(&self) -> &'static str {
-        "Log host connection, disconnection, and MAC-change events from ARP snapshots (NetworkConnectLog)"
+        "Log host connection, disconnection, and MAC-change events from ARP snapshots"
     }
 
     fn schema(&self) -> TableSchema {
@@ -1223,7 +1223,7 @@ mod tests {
 
     #[test]
     fn test_lan_scan_provider_mock_fusion() {
-        let provider = LanIpScannerProvider::new(NetContext::live())
+        let provider = SubnetScannerProvider::new(NetContext::live())
             .with_cidr(CidrV4::parse("192.168.50.0/29").unwrap())
             .with_backends(
                 Arc::new(MockScanArp),

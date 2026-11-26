@@ -1,4 +1,4 @@
-//! `capture.wifi-mon` (`WifiChannelMonitor`) TableProvider.
+//! `capture.wifi-mon` TableProvider.
 
 use guap_table::{
     CellValue, ColumnDef, ColumnType, Row, SortDirection, TableData, TableError, TableProvider, TableQuery, TableSchema,
@@ -23,7 +23,7 @@ impl WifiMonProvider {
 fn build_schema() -> TableSchema {
     TableSchema::new(
         "capture.wifi-mon",
-        "WifiChannelMonitor — 802.11 RadioTap & Beacon Monitor",
+        "802.11 RadioTap & Beacon Monitor",
         vec![
             ColumnDef::new("ssid", "SSID", ColumnType::Text).with_width_hint(180),
             ColumnDef::new("bssid", "BSSID", ColumnType::MacAddr).with_width_hint(140),
@@ -45,7 +45,7 @@ impl TableProvider for WifiMonProvider {
     }
 
     fn description(&self) -> &'static str {
-        "WifiChannelMonitor — 802.11 RadioTap/Beacon/Probe channel, RSSI, PHY, and security analyzer"
+        "802.11 RadioTap/Beacon/Probe channel, RSSI, PHY, and security analyzer"
     }
 
     fn schema(&self) -> TableSchema {

@@ -1,4 +1,4 @@
-//! `capture.http` (`HTTPNetworkSniffer`) TableProvider with strict R4 header/URL/raw_bytes redaction.
+//! `capture.http` TableProvider with strict R4 header/URL/raw_bytes redaction.
 
 use guap_table::{
     CellValue, ColumnDef, ColumnType, Row, SortDirection, TableData, TableError, TableProvider, TableQuery, TableSchema,
@@ -23,7 +23,7 @@ impl HttpProvider {
 fn build_schema() -> TableSchema {
     TableSchema::new(
         "capture.http",
-        "HTTPNetworkSniffer — HTTP Header Metadata",
+        "HTTP Header Metadata",
         vec![
             ColumnDef::new("timestamp", "Timestamp", ColumnType::Timestamp).with_width_hint(180),
             ColumnDef::new("method", "Method", ColumnType::Text).with_width_hint(80),
@@ -47,7 +47,7 @@ impl TableProvider for HttpProvider {
     }
 
     fn description(&self) -> &'static str {
-        "HTTPNetworkSniffer — HTTP request/response header metadata (R4 credential-free)"
+        "HTTP request/response header metadata (R4 credential-free)"
     }
 
     fn schema(&self) -> TableSchema {

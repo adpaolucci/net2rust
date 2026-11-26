@@ -50,7 +50,7 @@ const FORBIDDEN_PATTERNS: &[(&str, &str)] = &[
     ("setwindowshookexw", "prohibited global hook API"),
     ("setwindowshookex", "prohibited global hook API"),
     ("writeprocessmemory", "prohibited remote memory write API"),
-    // Retired obsolete legacy NirSoft tools (R4)
+    // Retired obsolete legacy tools (R4)
     ("iecacheview", "retired legacy IE tool"),
     ("iehistoryview", "retired legacy IE tool"),
     ("iecookiesview", "retired legacy IE tool"),
@@ -226,7 +226,7 @@ fn r4_runtime_providers_actions_and_capture_wifi_redaction() {
     let mut violations = Vec::new();
     for d in &descriptors {
         scan_text(&format!("descriptor:{}", d.id), d.id, &mut violations);
-        scan_text(&format!("descriptor_name:{}", d.id), d.nirsoft_name, &mut violations);
+        scan_text(&format!("descriptor_name:{}", d.id), d.display_name, &mut violations);
         scan_text(&format!("descriptor_desc:{}", d.id), d.description, &mut violations);
     }
     for p in &providers {

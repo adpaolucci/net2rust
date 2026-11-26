@@ -383,13 +383,13 @@ pub struct NetbiosHostRecord {
     pub user_hint: Option<String>,
 }
 
-pub struct NetBScannerProvider {
+pub struct NetBiosScannerProvider {
     ctx: NetContext,
     targets: Vec<Ipv4Addr>,
     backend: Arc<dyn NetbiosBackend>,
 }
 
-impl NetBScannerProvider {
+impl NetBiosScannerProvider {
     pub fn new(ctx: NetContext) -> Self {
         Self {
             ctx,
@@ -411,7 +411,7 @@ impl NetBScannerProvider {
     pub fn schema_def() -> TableSchema {
         TableSchema::new(
             "lan.netbios",
-            "NetBScanner — NetBIOS NBSTAT Scanner",
+            "NetBIOS NBSTAT Scanner",
             vec![
                 ColumnDef::new("ip", "IP Address", ColumnType::IpAddr).with_width_hint(130),
                 ColumnDef::new("computer_name", "Computer Name", ColumnType::Text).with_width_hint(160),
@@ -462,13 +462,13 @@ impl NetBScannerProvider {
     }
 }
 
-impl TableProvider for NetBScannerProvider {
+impl TableProvider for NetBiosScannerProvider {
     fn tool_id(&self) -> &'static str {
         "lan.netbios"
     }
 
     fn description(&self) -> &'static str {
-        "Scan hosts via RFC 1001/1002 UDP port 137 NBSTAT queries (NetBScanner)"
+        "Scan hosts via RFC 1001/1002 UDP port 137 NBSTAT queries"
     }
 
     fn schema(&self) -> TableSchema {

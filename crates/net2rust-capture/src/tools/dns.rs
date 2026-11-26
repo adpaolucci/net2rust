@@ -1,4 +1,4 @@
-//! `capture.dns` (`DNSQuerySniffer`) TableProvider supporting UDP 53 and TCP 53 (2-byte length prefix).
+//! `capture.dns` TableProvider supporting UDP 53 and TCP 53 (2-byte length prefix).
 
 use std::collections::{HashMap, VecDeque};
 use std::net::IpAddr;
@@ -31,7 +31,7 @@ impl DnsProvider {
 fn build_schema() -> TableSchema {
     TableSchema::new(
         "capture.dns",
-        "DNSQuerySniffer — DNS Queries & Responses",
+        "DNS Queries & Responses",
         vec![
             ColumnDef::new("timestamp", "Timestamp", ColumnType::Timestamp).with_width_hint(180),
             ColumnDef::new("tx_id", "TxID", ColumnType::Text).with_width_hint(80),
@@ -200,7 +200,7 @@ impl TableProvider for DnsProvider {
     }
 
     fn description(&self) -> &'static str {
-        "DNSQuerySniffer — RFC 1035 UDP/TCP DNS queries, answers, TTLs, and latency"
+        "RFC 1035 UDP/TCP DNS queries, answers, TTLs, and latency"
     }
 
     fn schema(&self) -> TableSchema {

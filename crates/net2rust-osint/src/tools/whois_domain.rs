@@ -17,13 +17,13 @@ use crate::whois::{
 };
 
 pub const TOOL_ID: &str = "osint.whois-domain";
-pub const DESCRIPTION: &str = "WhoisThisDomain equivalent: IANA and registrar WHOIS/RDAP domain registration lookup.";
+pub const DESCRIPTION: &str = "IANA and registrar WHOIS/RDAP domain registration lookup.";
 pub const MAX_DOMAIN_REFERRAL_HOPS: usize = 4;
 
 pub fn schema() -> TableSchema {
     TableSchema::new(
         TOOL_ID,
-        "WhoisThisDomain — Domain WHOIS & RDAP",
+        "Domain WHOIS & RDAP",
         vec![
             ColumnDef::new("Domain", "Domain", ColumnType::Text).with_width_hint(180),
             ColumnDef::new("Registrar", "Registrar", ColumnType::Text).with_width_hint(220),

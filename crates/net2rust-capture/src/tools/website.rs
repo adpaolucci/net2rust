@@ -1,4 +1,4 @@
-//! `capture.website` (`WebSiteSniffer`) TableProvider (strictly read-only, virtual SavedPath + SHA-256).
+//! `capture.website` TableProvider (strictly read-only, virtual SavedPath + SHA-256).
 
 use guap_table::{
     CellValue, ColumnDef, ColumnType, Row, SortDirection, TableData, TableError, TableProvider, TableQuery, TableSchema,
@@ -27,7 +27,7 @@ impl WebsiteProvider {
 fn build_schema() -> TableSchema {
     TableSchema::new(
         "capture.website",
-        "WebSiteSniffer — Reconstructed HTTP Assets",
+        "Reconstructed HTTP Assets",
         vec![
             ColumnDef::new("timestamp", "Timestamp", ColumnType::Timestamp).with_width_hint(180),
             ColumnDef::new("host", "Host", ColumnType::Text).with_width_hint(170),
@@ -88,7 +88,7 @@ impl TableProvider for WebsiteProvider {
     }
 
     fn description(&self) -> &'static str {
-        "WebSiteSniffer — read-only HTTP static asset reconstruction with SHA-256 digests"
+        "Read-only HTTP static asset reconstruction with SHA-256 digests"
     }
 
     fn schema(&self) -> TableSchema {

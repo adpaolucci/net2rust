@@ -23,7 +23,7 @@ use crate::whois::normalize_domain;
 
 pub const TOOL_ID: &str = "osint.hosting";
 pub const DESCRIPTION: &str =
-    "DomainHostingView equivalent: aggregated WHOIS, DNS, ASN, web host, and mail provider profiler.";
+    "Aggregated WHOIS, DNS, ASN, web host, and mail provider profiler.";
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct DomainHostingProfile {
@@ -46,7 +46,7 @@ pub struct DomainHostingProfile {
 pub fn schema() -> TableSchema {
     TableSchema::new(
         TOOL_ID,
-        "DomainHostingView — Domain Infrastructure & Hosting Profiler",
+        "Domain Infrastructure & Hosting Profiler",
         vec![
             ColumnDef::new("Domain", "Domain", ColumnType::Text).with_width_hint(180),
             ColumnDef::new("WebHostIP", "Web Host IP", ColumnType::IpAddr).with_width_hint(140),

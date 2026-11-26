@@ -1,4 +1,4 @@
-//! `capture.cookies` (`WebCookiesSniffer`) TableProvider with mandatory R4 auth/session redaction.
+//! `capture.cookies` TableProvider with mandatory R4 auth/session redaction.
 
 use std::net::IpAddr;
 
@@ -27,7 +27,7 @@ impl CookiesProvider {
 fn build_schema() -> TableSchema {
     TableSchema::new(
         "capture.cookies",
-        "WebCookiesSniffer — HTTP Cookie Metadata",
+        "HTTP Cookie Metadata",
         vec![
             ColumnDef::new("timestamp", "Timestamp", ColumnType::Timestamp).with_width_hint(180),
             ColumnDef::new("host", "Host", ColumnType::Text).with_width_hint(170),
@@ -161,7 +161,7 @@ impl TableProvider for CookiesProvider {
     }
 
     fn description(&self) -> &'static str {
-        "WebCookiesSniffer — HTTP Cookie/Set-Cookie metadata with mandatory R4 auth/session redaction"
+        "HTTP Cookie/Set-Cookie metadata with mandatory R4 auth/session redaction"
     }
 
     fn schema(&self) -> TableSchema {

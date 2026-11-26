@@ -211,7 +211,7 @@ fn parse_route_spec(args: &Value, require_or_allow_metric: bool) -> Result<Parse
     })
 }
 
-// 1. sockets.ports.close (CurrPorts SetTcpEntry)
+// 1. sockets.ports.close (SetTcpEntry)
 pub struct ClosePortAction {
     ctx: NetContext,
 }
@@ -325,7 +325,7 @@ impl ActionCommand for ClosePortAction {
     }
 }
 
-// 2. sockets.routes.add (NetRouteView CreateIpForwardEntry2)
+// 2. sockets.routes.add (CreateIpForwardEntry2)
 pub struct AddRouteAction {
     ctx: NetContext,
 }
@@ -432,7 +432,7 @@ impl ActionCommand for AddRouteAction {
     }
 }
 
-// 3. sockets.routes.delete (NetRouteView DeleteIpForwardEntry2)
+// 3. sockets.routes.delete (DeleteIpForwardEntry2)
 pub struct DeleteRouteAction {
     ctx: NetContext,
 }

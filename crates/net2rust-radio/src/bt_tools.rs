@@ -108,7 +108,7 @@ impl TableProvider for BtViewProvider {
     }
 
     fn description(&self) -> &'static str {
-        "BluetoothView equivalent: Bluetooth Classic device discovery monitor."
+        "Bluetooth Classic device discovery monitor."
     }
 
     fn schema(&self) -> TableSchema {
@@ -214,7 +214,7 @@ impl TableProvider for BtLogProvider {
     }
 
     fn description(&self) -> &'static str {
-        "BluetoothLogView equivalent: Bluetooth device arrival and departure event log."
+        "Bluetooth device arrival and departure event log."
     }
 
     fn schema(&self) -> TableSchema {
@@ -315,7 +315,7 @@ impl TableProvider for BtClProvider {
     }
 
     fn description(&self) -> &'static str {
-        "BluetoothCL equivalent: deterministic Bluetooth Classic enumeration."
+        "Deterministic Bluetooth Classic enumeration."
     }
 
     fn schema(&self) -> TableSchema {
@@ -402,7 +402,7 @@ impl TableProvider for BleViewProvider {
     }
 
     fn description(&self) -> &'static str {
-        "BluetoothLEView equivalent: Bluetooth Low Energy (BLE) advertisement, RSSI, service UUID, and manufacturer data scanner."
+        "Bluetooth Low Energy (BLE) advertisement, RSSI, service UUID, and manufacturer data scanner."
     }
 
     fn schema(&self) -> TableSchema {

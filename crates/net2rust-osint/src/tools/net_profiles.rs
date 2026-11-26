@@ -11,7 +11,7 @@ use crate::model::{load_fixture_json, parse_guid_flexible};
 
 pub const TOOL_ID: &str = "osint.net-profiles";
 pub const DESCRIPTION: &str =
-    "NetConnectChoose equivalent: Windows NetworkList profile inspector (mutating connect/disconnect gated).";
+    "Windows NetworkList profile inspector (mutating connect/disconnect gated).";
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct NetProfileRecord {
@@ -59,7 +59,7 @@ pub trait NetProfilesBackend: Send + Sync {
 pub fn schema() -> TableSchema {
     TableSchema::new(
         TOOL_ID,
-        "NetConnectChoose — NetworkList Profiles",
+        "Windows NetworkList Profiles",
         vec![
             ColumnDef::new("ProfileName", "Profile Name", ColumnType::Text).with_width_hint(180),
             ColumnDef::new("ProfileGuid", "Profile GUID", ColumnType::Text).with_width_hint(260),
@@ -808,7 +808,7 @@ pub mod win32_backend {
     impl NetProfilesBackend for WindowsNetProfilesBackend {
         fn list_profiles(&self) -> NetResult<Vec<NetProfileRecord>> {
             Err(NetError::NotSupported(
-                "live NetConnectChoose profile enumeration requires Windows".into(),
+                "live NetworkList profile enumeration requires Windows".into(),
             ))
         }
 
@@ -819,7 +819,7 @@ pub mod win32_backend {
             _dry_run: bool,
         ) -> NetResult<NetProfileActionResult> {
             Err(NetError::NotSupported(
-                "live NetConnectChoose connect/disconnect requires Windows".into(),
+                "live NetworkList connect/disconnect requires Windows".into(),
             ))
         }
     }

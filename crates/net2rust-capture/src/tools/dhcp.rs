@@ -1,4 +1,4 @@
-//! `capture.dhcp` (`DHCPLogView`) TableProvider.
+//! `capture.dhcp` TableProvider.
 
 use std::net::IpAddr;
 
@@ -26,7 +26,7 @@ impl DhcpProvider {
 fn build_schema() -> TableSchema {
     TableSchema::new(
         "capture.dhcp",
-        "DHCPLogView — DHCPv4 Transactions",
+        "DHCPv4 Lease Transactions",
         vec![
             ColumnDef::new("timestamp", "Timestamp", ColumnType::Timestamp).with_width_hint(180),
             ColumnDef::new("message_type", "MessageType", ColumnType::Text).with_width_hint(110),
@@ -49,7 +49,7 @@ impl TableProvider for DhcpProvider {
     }
 
     fn description(&self) -> &'static str {
-        "DHCPLogView — BOOTP/DHCPv4 Discover/Offer/Request/Ack lease transactions"
+        "BOOTP/DHCPv4 Discover/Offer/Request/Ack lease transactions"
     }
 
     fn schema(&self) -> TableSchema {

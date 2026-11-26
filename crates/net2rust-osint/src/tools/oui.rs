@@ -10,12 +10,12 @@ use crate::model::{plan_filter_query, split_target_list};
 use crate::oui_db::{OfflineOuiDb, OuiRecord};
 
 pub const TOOL_ID: &str = "osint.oui";
-pub const DESCRIPTION: &str = "MACAddressView equivalent: embedded offline IEEE MA-L/MA-M/MA-S MAC OUI vendor lookup.";
+pub const DESCRIPTION: &str = "Embedded offline IEEE MA-L/MA-M/MA-S MAC OUI vendor lookup.";
 
 pub fn schema() -> TableSchema {
     TableSchema::new(
         TOOL_ID,
-        "MACAddressView — IEEE OUI Vendor Lookup",
+        "IEEE MAC OUI Vendor Lookup",
         vec![
             ColumnDef::new("MACPrefix", "MAC Prefix", ColumnType::Text).with_width_hint(140),
             ColumnDef::new("VendorName", "Vendor Name", ColumnType::Text).with_width_hint(240),

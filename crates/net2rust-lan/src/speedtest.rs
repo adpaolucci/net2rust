@@ -158,14 +158,14 @@ impl DownloadTransport for UreqDownloadTransport {
     }
 }
 
-pub struct DownTesterProvider {
+pub struct SpeedtestProvider {
     ctx: NetContext,
     urls: Vec<String>,
     options: DownloadOptions,
     transport: Arc<dyn DownloadTransport>,
 }
 
-impl DownTesterProvider {
+impl SpeedtestProvider {
     pub fn new(ctx: NetContext) -> Self {
         Self {
             ctx,
@@ -193,7 +193,7 @@ impl DownTesterProvider {
     pub fn schema_def() -> TableSchema {
         TableSchema::new(
             "lan.speedtest",
-            "DownTester — HTTP/HTTPS Download Throughput",
+            "HTTP/HTTPS Download Throughput",
             vec![
                 ColumnDef::new("url", "URL", ColumnType::Text).with_width_hint(240),
                 ColumnDef::new("status_code", "HTTP Status", ColumnType::Uint).with_width_hint(90),
@@ -239,13 +239,13 @@ impl DownTesterProvider {
     }
 }
 
-impl TableProvider for DownTesterProvider {
+impl TableProvider for SpeedtestProvider {
     fn tool_id(&self) -> &'static str {
         "lan.speedtest"
     }
 
     fn description(&self) -> &'static str {
-        "Benchmark HTTP/HTTPS streaming download throughput via ureq (DownTester)"
+        "Benchmark HTTP/HTTPS streaming download throughput via ureq"
     }
 
     fn schema(&self) -> TableSchema {
@@ -334,7 +334,7 @@ mod tests {
     #[test]
     fn test_speedtest_mock_and_real_ureq_localhost_tcp_listener() {
         // 1) MockDownloadTransport
-        let mock_provider = DownTesterProvider::new(NetContext::live())
+        let mock_provider = SpeedtestProvider::new(NetContext::live())
             .with_transport(Arc::new(MockDownloadTransport))
             .with_urls(vec!["http://localhost/payload.bin".into()]);
         let mock_data = mock_provider.query(&TableQuery::default()).unwrap();
@@ -365,7 +365,7 @@ mod tests {
         });
 
         let url = format!("http://127.0.0.1:{port}/test.bin");
-        let live_provider = DownTesterProvider::new(NetContext::live()).with_urls(vec![url.clone()]);
+        let live_provider = SpeedtestProvider::new(NetContext::live()).with_urls(vec![url.clone()]);
         let data = live_provider.query(&TableQuery::default()).unwrap();
         server_thread.join().unwrap();
 
@@ -394,7 +394,7 @@ mod tests {
             }
         });
 
-        let capped = DownTesterProvider::new(NetContext::live())
+        let capped = SpeedtestProvider::new(NetContext::live())
             .with_options(DownloadOptions {
                 max_bytes: Some(32_768),
                 ..Default::default()

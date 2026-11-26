@@ -1,4 +1,4 @@
-//! `capture.sniff` (`SmartSniff`) TableProvider.
+//! `capture.sniff` TableProvider.
 
 use std::collections::HashSet;
 use std::net::IpAddr;
@@ -47,7 +47,7 @@ impl SniffProvider {
 fn build_schema() -> TableSchema {
     TableSchema::new(
         "capture.sniff",
-        "SmartSniff — Packet & Stream Summary",
+        "Packet & Stream Summary",
         vec![
             ColumnDef::new("packet_no", "PacketNo", ColumnType::Uint).with_width_hint(80),
             ColumnDef::new("timestamp", "Timestamp", ColumnType::Timestamp).with_width_hint(180),
@@ -70,7 +70,7 @@ impl TableProvider for SniffProvider {
     }
 
     fn description(&self) -> &'static str {
-        "SmartSniff — IPv4/IPv6/TCP/UDP/ICMP/ARP packet summary (R4 credential-free)"
+        "IPv4/IPv6/TCP/UDP/ICMP/ARP packet summary (R4 credential-free)"
     }
 
     fn schema(&self) -> TableSchema {

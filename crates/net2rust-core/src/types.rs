@@ -60,7 +60,7 @@ pub struct ToolDescriptor {
     pub id: &'static str,
     pub category: ToolCategory,
     pub subcommand: &'static str,
-    pub nirsoft_name: &'static str,
+    pub display_name: &'static str,
     pub description: &'static str,
     pub read_only: bool,
     pub has_mutating_action: bool,
