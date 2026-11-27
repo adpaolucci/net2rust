@@ -1,6 +1,6 @@
 class Net2rust < Formula
   desc "55 pure-Rust network diagnostics, ETW capture, LAN, OSINT, and Wi-Fi/BLE tools with Iced GUI, CLI, and MCP server"
-  homepage "https://net2rust.guap.ca"
+  homepage "https://guap.ca/net2rust/"
   version "0.1.0"
   license "Apache-2.0"
 

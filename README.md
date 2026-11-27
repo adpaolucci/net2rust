@@ -1,6 +1,6 @@
 # `net2rust` — 55-Tool Pure-Rust Network Diagnostics, ETW Capture, LAN, OSINT & Wi-Fi/BLE Suite
 
-Part of the **GUAP** Ecosystem (`guap.ca`) • [**Project Hub & Web Documentation: https://net2rust.guap.ca**](https://net2rust.guap.ca) • [**Project Wiki**](https://github.com/adpaolucci/net2rust/wiki)
+Part of the **GUAP** Ecosystem (`guap.ca`) • [**Project Hub & Web Documentation: https://guap.ca/net2rust/**](https://guap.ca/net2rust/) • [**Project Wiki**](https://github.com/adpaolucci/net2rust/wiki)
 
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
 [![Rust: 2024](https://img.shields.io/badge/Rust-2024%20(1.88%2B)-orange.svg)](Cargo.toml)
