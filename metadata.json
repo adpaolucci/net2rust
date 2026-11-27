@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "55 pure-Rust Windows & cross-platform network diagnostics, NDIS ETW packet capture, LAN, OSINT, and Wi-Fi/BLE tools with dual Win32/Iced GUIs, CLI, and policy-gated MCP server (R4 credential-free).",
   "repository": "https://github.com/adpaolucci/net2rust",
-  "homepage": "https://net2rust.guap.ca",
+  "homepage": "https://guap.ca/net2rust/",
   "license": "Apache-2.0",
   "binaries": [
     "net2rust",
@@ -23,82 +23,442 @@
     "CSV/TSV/JSON/JSONL/HTML/Markdown exports with SHA-256/512 Merkle chain of custody"
   ],
   "domainCrates": [
-    { "crate": "net2rust-sockets", "group": "sockets", "toolCount": 13 },
-    { "crate": "net2rust-capture", "group": "capture", "toolCount": 11 },
-    { "crate": "net2rust-lan", "group": "lan", "toolCount": 11 },
-    { "crate": "net2rust-osint", "group": "osint", "toolCount": 10 },
-    { "crate": "net2rust-radio", "group": "radio", "toolCount": 10 }
+    {
+      "crate": "net2rust-sockets",
+      "group": "sockets",
+      "toolCount": 13
+    },
+    {
+      "crate": "net2rust-capture",
+      "group": "capture",
+      "toolCount": 11
+    },
+    {
+      "crate": "net2rust-lan",
+      "group": "lan",
+      "toolCount": 11
+    },
+    {
+      "crate": "net2rust-osint",
+      "group": "osint",
+      "toolCount": 10
+    },
+    {
+      "crate": "net2rust-radio",
+      "group": "radio",
+      "toolCount": 10
+    }
   ],
   "tools": [
-    { "id": "sockets.ports", "crate": "net2rust-sockets", "title": "Active TCP/UDP Ports", "mutatingAction": true },
-    { "id": "sockets.tcplog", "crate": "net2rust-sockets", "title": "TCP Connection Log", "mutatingAction": false },
-    { "id": "sockets.live", "crate": "net2rust-sockets", "title": "Live TCP/UDP Monitor", "mutatingAction": false },
-    { "id": "sockets.app-net", "crate": "net2rust-sockets", "title": "Application Network Counters", "mutatingAction": false },
-    { "id": "sockets.proc-tcp", "crate": "net2rust-sockets", "title": "Process TCP/UDP Summary", "mutatingAction": false },
-    { "id": "sockets.tcp-errors", "crate": "net2rust-sockets", "title": "TCP Connect Problems", "mutatingAction": false },
-    { "id": "sockets.dns-log", "crate": "net2rust-sockets", "title": "DNS Lookup Log", "mutatingAction": false },
-    { "id": "sockets.counters", "crate": "net2rust-sockets", "title": "Protocol Stack Counters", "mutatingAction": false },
-    { "id": "sockets.adapter-watch", "crate": "net2rust-sockets", "title": "Network Adapter Monitor", "mutatingAction": false },
-    { "id": "sockets.interfaces", "crate": "net2rust-sockets", "title": "Network Interfaces", "mutatingAction": false },
-    { "id": "sockets.routes", "crate": "net2rust-sockets", "title": "IP Routing Table", "mutatingAction": true },
-    { "id": "sockets.neighbors", "crate": "net2rust-sockets", "title": "IP Neighbors (ARP/NDP)", "mutatingAction": false },
-    { "id": "sockets.paths", "crate": "net2rust-sockets", "title": "IP Path Table", "mutatingAction": false },
-    { "id": "capture.sniff", "crate": "net2rust-capture", "title": "Packet & Stream Summary", "mutatingAction": false },
-    { "id": "capture.traffic", "crate": "net2rust-capture", "title": "Aggregated Traffic Flows", "mutatingAction": false },
-    { "id": "capture.http", "crate": "net2rust-capture", "title": "HTTP Header Metadata", "mutatingAction": false },
-    { "id": "capture.dns", "crate": "net2rust-capture", "title": "DNS Queries & Responses", "mutatingAction": false },
-    { "id": "capture.dhcp", "crate": "net2rust-capture", "title": "DHCPv4 Lease Transactions", "mutatingAction": false },
-    { "id": "capture.mdns", "crate": "net2rust-capture", "title": "Multicast DNS & DNS-SD", "mutatingAction": false },
-    { "id": "capture.whois-lan", "crate": "net2rust-capture", "title": "Passive LAN Host Discovery", "mutatingAction": false },
-    { "id": "capture.cookies", "crate": "net2rust-capture", "title": "HTTP Cookie Metadata", "mutatingAction": false },
-    { "id": "capture.website", "crate": "net2rust-capture", "title": "Reconstructed HTTP Assets", "mutatingAction": false },
-    { "id": "capture.latency", "crate": "net2rust-capture", "title": "Passive TCP Handshake RTT", "mutatingAction": false },
-    { "id": "capture.wifi-mon", "crate": "net2rust-capture", "title": "802.11 RadioTap & Beacon Monitor", "mutatingAction": false },
-    { "id": "lan.ping", "crate": "net2rust-lan", "title": "Multi-Host Ping Monitor", "mutatingAction": false },
-    { "id": "lan.trace", "crate": "net2rust-lan", "title": "GeoIP Traceroute", "mutatingAction": false },
-    { "id": "lan.scan", "crate": "net2rust-lan", "title": "Subnet Host & Port Scanner", "mutatingAction": false },
-    { "id": "lan.wnetwatcher", "crate": "net2rust-lan", "title": "LAN Device ARP Inventory", "mutatingAction": false },
-    { "id": "lan.connect-log", "crate": "net2rust-lan", "title": "LAN Host Arrival & Departure Log", "mutatingAction": false },
-    { "id": "lan.wol", "crate": "net2rust-lan", "title": "Wake-on-LAN Host Inventory", "mutatingAction": true },
-    { "id": "lan.netbios", "crate": "net2rust-lan", "title": "NetBIOS NBSTAT Scanner", "mutatingAction": false },
-    { "id": "lan.shares", "crate": "net2rust-lan", "title": "SMB & WNet Shared Resources", "mutatingAction": false },
-    { "id": "lan.openfiles", "crate": "net2rust-lan", "title": "SMB Server Open Files", "mutatingAction": true },
-    { "id": "lan.resolve", "crate": "net2rust-lan", "title": "Parallel DNS & MAC OUI Resolver", "mutatingAction": false },
-    { "id": "lan.speedtest", "crate": "net2rust-lan", "title": "HTTP/HTTPS Download Throughput", "mutatingAction": false },
-    { "id": "osint.ipnet", "crate": "net2rust-osint", "title": "RIR WHOIS / RDAP IP Ownership", "mutatingAction": false },
-    { "id": "osint.whosip", "crate": "net2rust-osint", "title": "IP WHOIS & Referral Chasing", "mutatingAction": false },
-    { "id": "osint.ipoffline", "crate": "net2rust-osint", "title": "Embedded GeoIP & ASN Lookup", "mutatingAction": false },
-    { "id": "osint.whois-domain", "crate": "net2rust-osint", "title": "Domain WHOIS & RDAP", "mutatingAction": false },
-    { "id": "osint.whoiscl", "crate": "net2rust-osint", "title": "Batch WHOIS Query Runner", "mutatingAction": false },
-    { "id": "osint.dns", "crate": "net2rust-osint", "title": "RFC 1035 DNS Record Resolver", "mutatingAction": false },
-    { "id": "osint.hosting", "crate": "net2rust-osint", "title": "Domain Infrastructure & Hosting Profiler", "mutatingAction": false },
-    { "id": "osint.oui", "crate": "net2rust-osint", "title": "IEEE MAC OUI Vendor Lookup", "mutatingAction": false },
-    { "id": "osint.set-dns", "crate": "net2rust-osint", "title": "Interface DNS Configuration", "mutatingAction": true },
-    { "id": "osint.net-profiles", "crate": "net2rust-osint", "title": "Windows NetworkList Profiles", "mutatingAction": true },
-    { "id": "radio.wifi-info", "crate": "net2rust-radio", "title": "Wi-Fi BSS & Information Elements", "mutatingAction": false },
-    { "id": "radio.wifi-scan", "crate": "net2rust-radio", "title": "Wireless Network Availability Scanner", "mutatingAction": false },
-    { "id": "radio.wifi-console", "crate": "net2rust-radio", "title": "Streaming Wi-Fi Scan Table", "mutatingAction": false },
-    { "id": "radio.wifi-conn", "crate": "net2rust-radio", "title": "Active Wi-Fi Connection Info", "mutatingAction": false },
-    { "id": "radio.wifi-profiles", "crate": "net2rust-radio", "title": "Saved WLAN Profiles (R4 Redacted)", "mutatingAction": true },
-    { "id": "radio.wifi-hosted", "crate": "net2rust-radio", "title": "Wi-Fi Hosted Network Status", "mutatingAction": true },
-    { "id": "radio.bt-view", "crate": "net2rust-radio", "title": "Bluetooth Classic Device Discovery", "mutatingAction": false },
-    { "id": "radio.bt-log", "crate": "net2rust-radio", "title": "Bluetooth Arrival & Departure Log", "mutatingAction": false },
-    { "id": "radio.bt-cl", "crate": "net2rust-radio", "title": "Bluetooth Classic Enumeration", "mutatingAction": false },
-    { "id": "radio.ble", "crate": "net2rust-radio", "title": "Bluetooth Low Energy (BLE) Scanner", "mutatingAction": false }
+    {
+      "id": "sockets.ports",
+      "crate": "net2rust-sockets",
+      "title": "Active TCP/UDP Ports",
+      "mutatingAction": true
+    },
+    {
+      "id": "sockets.tcplog",
+      "crate": "net2rust-sockets",
+      "title": "TCP Connection Log",
+      "mutatingAction": false
+    },
+    {
+      "id": "sockets.live",
+      "crate": "net2rust-sockets",
+      "title": "Live TCP/UDP Monitor",
+      "mutatingAction": false
+    },
+    {
+      "id": "sockets.app-net",
+      "crate": "net2rust-sockets",
+      "title": "Application Network Counters",
+      "mutatingAction": false
+    },
+    {
+      "id": "sockets.proc-tcp",
+      "crate": "net2rust-sockets",
+      "title": "Process TCP/UDP Summary",
+      "mutatingAction": false
+    },
+    {
+      "id": "sockets.tcp-errors",
+      "crate": "net2rust-sockets",
+      "title": "TCP Connect Problems",
+      "mutatingAction": false
+    },
+    {
+      "id": "sockets.dns-log",
+      "crate": "net2rust-sockets",
+      "title": "DNS Lookup Log",
+      "mutatingAction": false
+    },
+    {
+      "id": "sockets.counters",
+      "crate": "net2rust-sockets",
+      "title": "Protocol Stack Counters",
+      "mutatingAction": false
+    },
+    {
+      "id": "sockets.adapter-watch",
+      "crate": "net2rust-sockets",
+      "title": "Network Adapter Monitor",
+      "mutatingAction": false
+    },
+    {
+      "id": "sockets.interfaces",
+      "crate": "net2rust-sockets",
+      "title": "Network Interfaces",
+      "mutatingAction": false
+    },
+    {
+      "id": "sockets.routes",
+      "crate": "net2rust-sockets",
+      "title": "IP Routing Table",
+      "mutatingAction": true
+    },
+    {
+      "id": "sockets.neighbors",
+      "crate": "net2rust-sockets",
+      "title": "IP Neighbors (ARP/NDP)",
+      "mutatingAction": false
+    },
+    {
+      "id": "sockets.paths",
+      "crate": "net2rust-sockets",
+      "title": "IP Path Table",
+      "mutatingAction": false
+    },
+    {
+      "id": "capture.sniff",
+      "crate": "net2rust-capture",
+      "title": "Packet & Stream Summary",
+      "mutatingAction": false
+    },
+    {
+      "id": "capture.traffic",
+      "crate": "net2rust-capture",
+      "title": "Aggregated Traffic Flows",
+      "mutatingAction": false
+    },
+    {
+      "id": "capture.http",
+      "crate": "net2rust-capture",
+      "title": "HTTP Header Metadata",
+      "mutatingAction": false
+    },
+    {
+      "id": "capture.dns",
+      "crate": "net2rust-capture",
+      "title": "DNS Queries & Responses",
+      "mutatingAction": false
+    },
+    {
+      "id": "capture.dhcp",
+      "crate": "net2rust-capture",
+      "title": "DHCPv4 Lease Transactions",
+      "mutatingAction": false
+    },
+    {
+      "id": "capture.mdns",
+      "crate": "net2rust-capture",
+      "title": "Multicast DNS & DNS-SD",
+      "mutatingAction": false
+    },
+    {
+      "id": "capture.whois-lan",
+      "crate": "net2rust-capture",
+      "title": "Passive LAN Host Discovery",
+      "mutatingAction": false
+    },
+    {
+      "id": "capture.cookies",
+      "crate": "net2rust-capture",
+      "title": "HTTP Cookie Metadata",
+      "mutatingAction": false
+    },
+    {
+      "id": "capture.website",
+      "crate": "net2rust-capture",
+      "title": "Reconstructed HTTP Assets",
+      "mutatingAction": false
+    },
+    {
+      "id": "capture.latency",
+      "crate": "net2rust-capture",
+      "title": "Passive TCP Handshake RTT",
+      "mutatingAction": false
+    },
+    {
+      "id": "capture.wifi-mon",
+      "crate": "net2rust-capture",
+      "title": "802.11 RadioTap & Beacon Monitor",
+      "mutatingAction": false
+    },
+    {
+      "id": "lan.ping",
+      "crate": "net2rust-lan",
+      "title": "Multi-Host Ping Monitor",
+      "mutatingAction": false
+    },
+    {
+      "id": "lan.trace",
+      "crate": "net2rust-lan",
+      "title": "GeoIP Traceroute",
+      "mutatingAction": false
+    },
+    {
+      "id": "lan.scan",
+      "crate": "net2rust-lan",
+      "title": "Subnet Host & Port Scanner",
+      "mutatingAction": false
+    },
+    {
+      "id": "lan.wnetwatcher",
+      "crate": "net2rust-lan",
+      "title": "LAN Device ARP Inventory",
+      "mutatingAction": false
+    },
+    {
+      "id": "lan.connect-log",
+      "crate": "net2rust-lan",
+      "title": "LAN Host Arrival & Departure Log",
+      "mutatingAction": false
+    },
+    {
+      "id": "lan.wol",
+      "crate": "net2rust-lan",
+      "title": "Wake-on-LAN Host Inventory",
+      "mutatingAction": true
+    },
+    {
+      "id": "lan.netbios",
+      "crate": "net2rust-lan",
+      "title": "NetBIOS NBSTAT Scanner",
+      "mutatingAction": false
+    },
+    {
+      "id": "lan.shares",
+      "crate": "net2rust-lan",
+      "title": "SMB & WNet Shared Resources",
+      "mutatingAction": false
+    },
+    {
+      "id": "lan.openfiles",
+      "crate": "net2rust-lan",
+      "title": "SMB Server Open Files",
+      "mutatingAction": true
+    },
+    {
+      "id": "lan.resolve",
+      "crate": "net2rust-lan",
+      "title": "Parallel DNS & MAC OUI Resolver",
+      "mutatingAction": false
+    },
+    {
+      "id": "lan.speedtest",
+      "crate": "net2rust-lan",
+      "title": "HTTP/HTTPS Download Throughput",
+      "mutatingAction": false
+    },
+    {
+      "id": "osint.ipnet",
+      "crate": "net2rust-osint",
+      "title": "RIR WHOIS / RDAP IP Ownership",
+      "mutatingAction": false
+    },
+    {
+      "id": "osint.whosip",
+      "crate": "net2rust-osint",
+      "title": "IP WHOIS & Referral Chasing",
+      "mutatingAction": false
+    },
+    {
+      "id": "osint.ipoffline",
+      "crate": "net2rust-osint",
+      "title": "Embedded GeoIP & ASN Lookup",
+      "mutatingAction": false
+    },
+    {
+      "id": "osint.whois-domain",
+      "crate": "net2rust-osint",
+      "title": "Domain WHOIS & RDAP",
+      "mutatingAction": false
+    },
+    {
+      "id": "osint.whoiscl",
+      "crate": "net2rust-osint",
+      "title": "Batch WHOIS Query Runner",
+      "mutatingAction": false
+    },
+    {
+      "id": "osint.dns",
+      "crate": "net2rust-osint",
+      "title": "RFC 1035 DNS Record Resolver",
+      "mutatingAction": false
+    },
+    {
+      "id": "osint.hosting",
+      "crate": "net2rust-osint",
+      "title": "Domain Infrastructure & Hosting Profiler",
+      "mutatingAction": false
+    },
+    {
+      "id": "osint.oui",
+      "crate": "net2rust-osint",
+      "title": "IEEE MAC OUI Vendor Lookup",
+      "mutatingAction": false
+    },
+    {
+      "id": "osint.set-dns",
+      "crate": "net2rust-osint",
+      "title": "Interface DNS Configuration",
+      "mutatingAction": true
+    },
+    {
+      "id": "osint.net-profiles",
+      "crate": "net2rust-osint",
+      "title": "Windows NetworkList Profiles",
+      "mutatingAction": true
+    },
+    {
+      "id": "radio.wifi-info",
+      "crate": "net2rust-radio",
+      "title": "Wi-Fi BSS & Information Elements",
+      "mutatingAction": false
+    },
+    {
+      "id": "radio.wifi-scan",
+      "crate": "net2rust-radio",
+      "title": "Wireless Network Availability Scanner",
+      "mutatingAction": false
+    },
+    {
+      "id": "radio.wifi-console",
+      "crate": "net2rust-radio",
+      "title": "Streaming Wi-Fi Scan Table",
+      "mutatingAction": false
+    },
+    {
+      "id": "radio.wifi-conn",
+      "crate": "net2rust-radio",
+      "title": "Active Wi-Fi Connection Info",
+      "mutatingAction": false
+    },
+    {
+      "id": "radio.wifi-profiles",
+      "crate": "net2rust-radio",
+      "title": "Saved WLAN Profiles (R4 Redacted)",
+      "mutatingAction": true
+    },
+    {
+      "id": "radio.wifi-hosted",
+      "crate": "net2rust-radio",
+      "title": "Wi-Fi Hosted Network Status",
+      "mutatingAction": true
+    },
+    {
+      "id": "radio.bt-view",
+      "crate": "net2rust-radio",
+      "title": "Bluetooth Classic Device Discovery",
+      "mutatingAction": false
+    },
+    {
+      "id": "radio.bt-log",
+      "crate": "net2rust-radio",
+      "title": "Bluetooth Arrival & Departure Log",
+      "mutatingAction": false
+    },
+    {
+      "id": "radio.bt-cl",
+      "crate": "net2rust-radio",
+      "title": "Bluetooth Classic Enumeration",
+      "mutatingAction": false
+    },
+    {
+      "id": "radio.ble",
+      "crate": "net2rust-radio",
+      "title": "Bluetooth Low Energy (BLE) Scanner",
+      "mutatingAction": false
+    }
   ],
   "actions": [
-    { "id": "sockets.ports.close", "tool": "sockets.ports", "crate": "net2rust-sockets", "riskLevel": "PrivilegedMutating" },
-    { "id": "sockets.routes.add", "tool": "sockets.routes", "crate": "net2rust-sockets", "riskLevel": "PrivilegedMutating" },
-    { "id": "sockets.routes.delete", "tool": "sockets.routes", "crate": "net2rust-sockets", "riskLevel": "PrivilegedMutating" },
-    { "id": "lan.wol.send", "tool": "lan.wol", "crate": "net2rust-lan", "riskLevel": "Mutating" },
-    { "id": "lan.openfiles.close", "tool": "lan.openfiles", "crate": "net2rust-lan", "riskLevel": "PrivilegedMutating" },
-    { "id": "osint.set-dns.apply", "tool": "osint.set-dns", "crate": "net2rust-osint", "riskLevel": "PrivilegedMutating" },
-    { "id": "osint.net-profiles.connect", "tool": "osint.net-profiles", "crate": "net2rust-osint", "riskLevel": "PrivilegedMutating" },
-    { "id": "osint.net-profiles.disconnect", "tool": "osint.net-profiles", "crate": "net2rust-osint", "riskLevel": "PrivilegedMutating" },
-    { "id": "radio.wifi-profiles.set-order", "tool": "radio.wifi-profiles", "crate": "net2rust-radio", "riskLevel": "Mutating" },
-    { "id": "radio.wifi-profiles.delete", "tool": "radio.wifi-profiles", "crate": "net2rust-radio", "riskLevel": "Mutating" },
-    { "id": "radio.wifi-profiles.toggle-auto", "tool": "radio.wifi-profiles", "crate": "net2rust-radio", "riskLevel": "Mutating" },
-    { "id": "radio.wifi-hosted.start", "tool": "radio.wifi-hosted", "crate": "net2rust-radio", "riskLevel": "PrivilegedMutating" },
-    { "id": "radio.wifi-hosted.stop", "tool": "radio.wifi-hosted", "crate": "net2rust-radio", "riskLevel": "PrivilegedMutating" }
+    {
+      "id": "sockets.ports.close",
+      "tool": "sockets.ports",
+      "crate": "net2rust-sockets",
+      "riskLevel": "PrivilegedMutating"
+    },
+    {
+      "id": "sockets.routes.add",
+      "tool": "sockets.routes",
+      "crate": "net2rust-sockets",
+      "riskLevel": "PrivilegedMutating"
+    },
+    {
+      "id": "sockets.routes.delete",
+      "tool": "sockets.routes",
+      "crate": "net2rust-sockets",
+      "riskLevel": "PrivilegedMutating"
+    },
+    {
+      "id": "lan.wol.send",
+      "tool": "lan.wol",
+      "crate": "net2rust-lan",
+      "riskLevel": "Mutating"
+    },
+    {
+      "id": "lan.openfiles.close",
+      "tool": "lan.openfiles",
+      "crate": "net2rust-lan",
+      "riskLevel": "PrivilegedMutating"
+    },
+    {
+      "id": "osint.set-dns.apply",
+      "tool": "osint.set-dns",
+      "crate": "net2rust-osint",
+      "riskLevel": "PrivilegedMutating"
+    },
+    {
+      "id": "osint.net-profiles.connect",
+      "tool": "osint.net-profiles",
+      "crate": "net2rust-osint",
+      "riskLevel": "PrivilegedMutating"
+    },
+    {
+      "id": "osint.net-profiles.disconnect",
+      "tool": "osint.net-profiles",
+      "crate": "net2rust-osint",
+      "riskLevel": "PrivilegedMutating"
+    },
+    {
+      "id": "radio.wifi-profiles.set-order",
+      "tool": "radio.wifi-profiles",
+      "crate": "net2rust-radio",
+      "riskLevel": "Mutating"
+    },
+    {
+      "id": "radio.wifi-profiles.delete",
+      "tool": "radio.wifi-profiles",
+      "crate": "net2rust-radio",
+      "riskLevel": "Mutating"
+    },
+    {
+      "id": "radio.wifi-profiles.toggle-auto",
+      "tool": "radio.wifi-profiles",
+      "crate": "net2rust-radio",
+      "riskLevel": "Mutating"
+    },
+    {
+      "id": "radio.wifi-hosted.start",
+      "tool": "radio.wifi-hosted",
+      "crate": "net2rust-radio",
+      "riskLevel": "PrivilegedMutating"
+    },
+    {
+      "id": "radio.wifi-hosted.stop",
+      "tool": "radio.wifi-hosted",
+      "crate": "net2rust-radio",
+      "riskLevel": "PrivilegedMutating"
+    }
   ]
 }
