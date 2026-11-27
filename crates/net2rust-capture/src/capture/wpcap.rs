@@ -1,6 +1,7 @@
 //! Optional dynamic `wpcap.dll` (Npcap) loader via `libloading` with graceful fallback.
 
 use std::ffi::{CStr, CString, c_char, c_int, c_long, c_void};
+#[cfg(windows)]
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
@@ -366,7 +367,9 @@ pub fn capture_live(req: &CaptureRequest, timeout: Duration) -> NetResult<Vec<Ca
                 let hdr = unsafe { &*pkt_hdr };
                 let cap_len = hdr.caplen as usize;
                 let data = unsafe { std::slice::from_raw_parts(pkt_data, cap_len) }.to_vec();
-                let ts = DateTime::from_timestamp(i64::from(hdr.ts.tv_sec), (hdr.ts.tv_usec.max(0) as u32) * 1_000);
+                #[allow(clippy::useless_conversion)]
+                let tv_sec = i64::from(hdr.ts.tv_sec);
+                let ts = DateTime::from_timestamp(tv_sec, (hdr.ts.tv_usec.max(0) as u32) * 1_000);
                 packets.push(CapturedPacket {
                     packet_no,
                     timestamp: ts,

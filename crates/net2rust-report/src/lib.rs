@@ -5864,14 +5864,12 @@ fn scan_next_tag_close_after_q(
                                     }
                                 }
                             }
-                        } else if b == b'&'
+                        } else if (b == b'&'
                             && matches!(
                                 match_html_quote_entity(&bytes[p..]),
                                 Some((HtmlQuoteMode::DoubleEntity, _))
-                            )
-                        {
-                            return (None, first_skipped_eq.unwrap_or(p));
-                        } else if (ctx.in_json_string && matches!(b, b'"' | b'\r' | b'\n' | b'\t'))
+                            ))
+                            || (ctx.in_json_string && matches!(b, b'"' | b'\r' | b'\n' | b'\t'))
                             || (ctx.in_markdown_table_line && b == b'|')
                             || (!ctx.in_csv_field && ctx.allow_tsv_tabs && b == b'\t')
                         {
