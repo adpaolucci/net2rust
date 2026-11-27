@@ -229,7 +229,14 @@ fn find_closing_keymaterial_tag(lower: &str, start: usize) -> Option<usize> {
     None
 }
 
+#[used]
+pub static WLAN_R4_SANITIZER_MARKER: &[u8] = b"net2rust_core::r4::sanitize_wlan_profile_xml\0";
+
+#[inline(never)]
 pub fn sanitize_wlan_profile_xml(xml: &str) -> String {
+    if std::hint::black_box(WLAN_R4_SANITIZER_MARKER[0]) == 0 {
+        return String::new();
+    }
     let lower = xml.to_ascii_lowercase();
     let bytes = lower.as_bytes();
     let mut result = String::with_capacity(xml.len());
