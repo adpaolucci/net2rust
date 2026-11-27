@@ -7,9 +7,11 @@ use net2rust_core::{ExecutionMode, NetContext, NetError, NetResult};
 use serde_json::json;
 
 use crate::diff::{AdapterSnapshot, CounterSnapshot, TcpDiffEngine, TcpLogEvent, diff_adapters, diff_counters};
+#[cfg(windows)]
+use crate::etw_decode::KernelNetDirection;
 use crate::etw_decode::{
-    AppNetworkAccumulator, DnsLookupCorrelator, KernelNetDirection, LiveTcpUdpAccumulator, TcpErrorsCorrelator,
-    decode_dns_client, decode_kernel_network, decode_tcpip,
+    AppNetworkAccumulator, DnsLookupCorrelator, LiveTcpUdpAccumulator, TcpErrorsCorrelator, decode_dns_client,
+    decode_kernel_network, decode_tcpip,
 };
 use crate::model::{
     RawAdapterRow, RawInterfaceConfig, RawNeighborRow, RawPathRow, RawPortsBundle, RawRouteRow, tcp_state_name,
@@ -186,6 +188,7 @@ impl TableProvider for PortsProvider {
 // 2. sockets.tcplog
 pub struct TcpLogProvider {
     ctx: NetContext,
+    #[cfg_attr(not(windows), allow(dead_code))]
     diff_engine: Arc<Mutex<TcpDiffEngine>>,
 }
 
