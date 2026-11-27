@@ -100,7 +100,10 @@ fn starts_raw_json_container(bytes: &[u8], pos: usize) -> bool {
     };
     match opener {
         b'{' => matches!(next, b'}' | b'"'),
-        b'[' => matches!(next, b']' | b'"' | b'{' | b'[' | b'-' | b'0'..=b'9' | b't' | b'f' | b'n'),
+        b'[' => matches!(
+            next,
+            b']' | b'"' | b'{' | b'[' | b'-' | b'0'..=b'9' | b't' | b'f' | b'n'
+        ),
         _ => false,
     }
 }
@@ -3049,7 +3052,10 @@ fn sanitize_html_fragment_r4_with_origin(s: &str, depth: usize, from_json_value:
                         if rel_s >= raw_cur && rel_e <= text_buf.len() {
                             masked_raw.push_str(&String::from_utf8_lossy(&text_buf[raw_cur..rel_s]));
                             let token = format!("{ph_prefix}{}_", clean_placeholders.len());
-                            clean_placeholders.push((token.clone(), String::from_utf8_lossy(&text_buf[rel_s..rel_e]).into_owned()));
+                            clean_placeholders.push((
+                                token.clone(),
+                                String::from_utf8_lossy(&text_buf[rel_s..rel_e]).into_owned(),
+                            ));
                             masked_raw.push_str(&token);
                             raw_cur = rel_e;
                         }
@@ -3063,27 +3069,23 @@ fn sanitize_html_fragment_r4_with_origin(s: &str, depth: usize, from_json_value:
                 let mut prefixed_for_err = Vec::with_capacity(prefix.len() + effective_raw.len());
                 prefixed_for_err.extend_from_slice(prefix.as_bytes());
                 prefixed_for_err.extend_from_slice(effective_raw.as_bytes());
-                let mut rendered_piece = if assert_r4_clean_decoded_cell_inner_with_origin(
-                    &prefixed_for_err,
-                    depth,
-                    false,
-                    from_json_value,
-                )
-                .is_err()
-                {
-                    let prefixed_raw = format!("{prefix}{effective_raw}");
-                    let sanitized = sanitize_string_r4_inner_with_origin(&prefixed_raw, depth + 1, from_json_value);
-                    strip_or_unwrap_json_prefix(&sanitized, prefix, &effective_raw)
-                } else {
-                    let decoded = unescape_html_entities(&prefixed_for_err);
-                    let decoded_str = String::from_utf8_lossy(&decoded);
-                    let dec_prefix = "{\"_\":\"";
-                    let sanitized = sanitize_string_r4_inner_with_origin(&decoded_str, depth + 1, from_json_value);
-                    let raw_dec = unescape_html_entities(effective_raw.as_bytes());
-                    let raw_dec_str = String::from_utf8_lossy(&raw_dec);
-                    let clean_dec = strip_or_unwrap_json_prefix(&sanitized, dec_prefix, &raw_dec_str);
-                    escape_html_text(&clean_dec)
-                };
+                let mut rendered_piece =
+                    if assert_r4_clean_decoded_cell_inner_with_origin(&prefixed_for_err, depth, false, from_json_value)
+                        .is_err()
+                    {
+                        let prefixed_raw = format!("{prefix}{effective_raw}");
+                        let sanitized = sanitize_string_r4_inner_with_origin(&prefixed_raw, depth + 1, from_json_value);
+                        strip_or_unwrap_json_prefix(&sanitized, prefix, &effective_raw)
+                    } else {
+                        let decoded = unescape_html_entities(&prefixed_for_err);
+                        let decoded_str = String::from_utf8_lossy(&decoded);
+                        let dec_prefix = "{\"_\":\"";
+                        let sanitized = sanitize_string_r4_inner_with_origin(&decoded_str, depth + 1, from_json_value);
+                        let raw_dec = unescape_html_entities(effective_raw.as_bytes());
+                        let raw_dec_str = String::from_utf8_lossy(&raw_dec);
+                        let clean_dec = strip_or_unwrap_json_prefix(&sanitized, dec_prefix, &raw_dec_str);
+                        escape_html_text(&clean_dec)
+                    };
                 for (tok, orig) in clean_placeholders {
                     rendered_piece = rendered_piece.replace(&tok, &orig);
                 }
@@ -5797,8 +5799,7 @@ fn scan_next_tag_close_after_q(
                                 in_quote = None;
                                 p = q + 1;
                             }
-                        } else if bs % 2 == 1 && bytes.get(q..q + 5).is_some_and(|s| s.eq_ignore_ascii_case(b"u0022"))
-                        {
+                        } else if bs % 2 == 1 && bytes.get(q..q + 5).is_some_and(|s| s.eq_ignore_ascii_case(b"u0022")) {
                             if strict_json_u0022 {
                                 return (None, first_skipped_eq.unwrap_or(p));
                             }
@@ -5811,8 +5812,7 @@ fn scan_next_tag_close_after_q(
                         }
                     } else if matches!(b, b'"' | b'\t')
                         || (ctx.in_json_string && matches!(b, b'\r' | b'\n'))
-                        || (ctx.in_markdown_table_line
-                            && (b == b'|' || (b == b'<' && bytes[p..].starts_with(b"<br>"))))
+                        || (ctx.in_markdown_table_line && (b == b'|' || (b == b'<' && bytes[p..].starts_with(b"<br>"))))
                     {
                         return (None, first_skipped_eq.unwrap_or(p));
                     } else {
@@ -5826,9 +5826,7 @@ fn scan_next_tag_close_after_q(
                         if bs % 4 == 2 && bytes.get(q) == Some(&b'"') {
                             in_quote = None;
                             p = q + 1;
-                        } else if bs % 4 == 2
-                            && bytes.get(q..q + 5).is_some_and(|s| s.eq_ignore_ascii_case(b"u0022"))
-                        {
+                        } else if bs % 4 == 2 && bytes.get(q..q + 5).is_some_and(|s| s.eq_ignore_ascii_case(b"u0022")) {
                             in_quote = None;
                             p = q + 5;
                         } else if bs % 2 == 1 && bytes.get(q) == Some(&b'|') {
@@ -6014,9 +6012,9 @@ fn scan_next_tag_close_after_q(
                             p = q;
                         }
                     } else if (!double_bs && matches!(b, b'"' | b'\r' | b'\n' | b'\t'))
-                        || (double_bs && (matches!(b, b'"' | b'\t') || (ctx.in_json_string && matches!(b, b'\r' | b'\n'))))
-                        || (ctx.in_markdown_table_line
-                            && (b == b'|' || (b == b'<' && bytes[p..].starts_with(b"<br>"))))
+                        || (double_bs
+                            && (matches!(b, b'"' | b'\t') || (ctx.in_json_string && matches!(b, b'\r' | b'\n'))))
+                        || (ctx.in_markdown_table_line && (b == b'|' || (b == b'<' && bytes[p..].starts_with(b"<br>"))))
                     {
                         return (None, first_skipped_eq.unwrap_or(p));
                     } else {
@@ -6044,8 +6042,7 @@ fn scan_next_tag_close_after_q(
                             && (bytes.get(q) == Some(&b'"')
                                 || bytes.get(q..q + 5).is_some_and(|s| s.eq_ignore_ascii_case(b"u0022"))))
                             || (in_json_or_u0022
-                                && ((ctx.in_double_escaped_json && ctx.allow_double_bs && bs % 4 == 2)
-                                    || bs % 2 == 1)
+                                && ((ctx.in_double_escaped_json && ctx.allow_double_bs && bs % 4 == 2) || bs % 2 == 1)
                                 && bytes.get(q..q + 5).is_some_and(|s| s.eq_ignore_ascii_case(b"u0022")))
                         {
                             return (None, first_skipped_eq.unwrap_or(p));
@@ -11062,12 +11059,10 @@ fn assert_r4_clean_json_string_value(s: &str, depth: usize, allow_html: bool) ->
     }
     let s_for_scan = s;
     let bytes = s_for_scan.as_bytes();
-    let allow_csv = (bytes.contains(&b'\n') || bytes.contains(&b'\r'))
-        && bytes.contains(&b'"')
-        && {
-            let lower_s = to_ascii_lowercase_vec(bytes);
-            is_inline_prefixed_rfc4180_csv(bytes, &lower_s)
-        };
+    let allow_csv = (bytes.contains(&b'\n') || bytes.contains(&b'\r')) && bytes.contains(&b'"') && {
+        let lower_s = to_ascii_lowercase_vec(bytes);
+        is_inline_prefixed_rfc4180_csv(bytes, &lower_s)
+    };
     if depth < MAX_NESTED_JSON_DEPTH && (s_for_scan.contains('{') || s_for_scan.contains('[')) {
         let mut open_km_ranges_opt: Option<Vec<(usize, usize)>> = None;
         let mut mask_spans = Vec::new();
@@ -11209,12 +11204,10 @@ fn assert_r4_clean_decoded_cell_inner_with_options(
         let masked_html = mask_html_tags_for_json_scan(cell);
         return assert_r4_clean_decoded_cell_inner_with_options(&masked_html, depth, false, from_json_value, false);
     }
-    let allow_csv = (cell.contains(&b'\n') || cell.contains(&b'\r'))
-        && cell.contains(&b'"')
-        && {
-            let lower_cell = to_ascii_lowercase_vec(cell);
-            is_inline_prefixed_rfc4180_csv(cell, &lower_cell)
-        };
+    let allow_csv = (cell.contains(&b'\n') || cell.contains(&b'\r')) && cell.contains(&b'"') && {
+        let lower_cell = to_ascii_lowercase_vec(cell);
+        is_inline_prefixed_rfc4180_csv(cell, &lower_cell)
+    };
     let trimmed = cell.trim_ascii();
     if allow_csv
         || cell.contains(&b'{')
@@ -18950,11 +18943,13 @@ mod tests {
                         !out.contains("[REDACTED]"),
                         "{label} over-redacted {clean} in {fmt:?}: {out}"
                     );
-                    assert_r4_clean_for_format(&rendered, fmt)
-                        .unwrap_or_else(|e| panic!("{label} assert_r4_clean_for_format({fmt:?}) failed for {clean}: {e}"));
+                    assert_r4_clean_for_format(&rendered, fmt).unwrap_or_else(|e| {
+                        panic!("{label} assert_r4_clean_for_format({fmt:?}) failed for {clean}: {e}")
+                    });
                     if fmt != ExportFormat::Tsv {
-                        assert_r4_clean_bytes(&rendered)
-                            .unwrap_or_else(|e| panic!("{label} assert_r4_clean_bytes({fmt:?}) failed for {clean}: {e}"));
+                        assert_r4_clean_bytes(&rendered).unwrap_or_else(|e| {
+                            panic!("{label} assert_r4_clean_bytes({fmt:?}) failed for {clean}: {e}")
+                        });
                     }
                 }
             }
@@ -19127,7 +19122,12 @@ mod tests {
                     t0.elapsed()
                 );
                 let data = single_cell_table(payload);
-                for fmt in [ExportFormat::Csv, ExportFormat::Json, ExportFormat::Html, ExportFormat::Markdown] {
+                for fmt in [
+                    ExportFormat::Csv,
+                    ExportFormat::Json,
+                    ExportFormat::Html,
+                    ExportFormat::Markdown,
+                ] {
                     let tf = std::time::Instant::now();
                     let rendered = render_report(&data, fmt, &ReportOptions::default()).unwrap();
                     let out = String::from_utf8_lossy(&rendered);
@@ -19186,7 +19186,9 @@ mod tests {
                 rows: vec![Row {
                     id: 1,
                     cells: vec![CellValue::Text(valid_json_c1_1_variants[0].to_string())],
-                    detail_json: Some(json!({ "xml": "<keyMaterial attr='a' b=\"1\"/>LeakU0027AttrSlashGt</keyMaterial> '" })),
+                    detail_json: Some(
+                        json!({ "xml": "<keyMaterial attr='a' b=\"1\"/>LeakU0027AttrSlashGt</keyMaterial> '" }),
+                    ),
                     raw_bytes: None,
                 }],
                 total_rows: 1,
@@ -19307,7 +19309,12 @@ mod tests {
             );
             let ch3_data = single_cell_table(&ch3_unclosed_p_5000);
             let t_multi = std::time::Instant::now();
-            for fmt in [ExportFormat::Csv, ExportFormat::Json, ExportFormat::Html, ExportFormat::Markdown] {
+            for fmt in [
+                ExportFormat::Csv,
+                ExportFormat::Json,
+                ExportFormat::Html,
+                ExportFormat::Markdown,
+            ] {
                 let rendered = render_report(&ch3_data, fmt, &ReportOptions::default()).unwrap();
                 assert!(!String::from_utf8_lossy(&rendered).contains("[REDACTED]"));
                 assert_r4_clean_for_format(&rendered, fmt).unwrap();
@@ -19343,7 +19350,10 @@ mod tests {
             assert_leaks_redacted(
                 "Iter28 E3 Edge Cases",
                 &[
-                    ("SecretNumEnt", r#"<p a=&lt;&#107;eyMaterial&gt;SecretNumEnt&lt;/keyMaterial&gt;>"#),
+                    (
+                        "SecretNumEnt",
+                        r#"<p a=&lt;&#107;eyMaterial&gt;SecretNumEnt&lt;/keyMaterial&gt;>"#,
+                    ),
                     (
                         "LeakAdjRedacted",
                         r#"[REDACTED] [1, 2] {"a":"<keyMaterial>LeakAdjRedacted</keyMaterial>"}"#,
@@ -19364,7 +19374,12 @@ mod tests {
             let t_tags = std::time::Instant::now();
             assert_r4_clean_bytes(tags_5000.as_bytes()).unwrap();
             let tags_data = single_cell_table(&tags_5000);
-            for fmt in [ExportFormat::Csv, ExportFormat::Json, ExportFormat::Html, ExportFormat::Markdown] {
+            for fmt in [
+                ExportFormat::Csv,
+                ExportFormat::Json,
+                ExportFormat::Html,
+                ExportFormat::Markdown,
+            ] {
                 let rendered = render_report(&tags_data, fmt, &ReportOptions::default()).unwrap();
                 assert_r4_clean_for_format(&rendered, fmt).unwrap();
             }
@@ -19379,7 +19394,12 @@ mod tests {
             let t_ok = std::time::Instant::now();
             assert_r4_clean_bytes(ok_5000.as_bytes()).unwrap();
             let ok_data = single_cell_table(&ok_5000);
-            for fmt in [ExportFormat::Csv, ExportFormat::Json, ExportFormat::Html, ExportFormat::Markdown] {
+            for fmt in [
+                ExportFormat::Csv,
+                ExportFormat::Json,
+                ExportFormat::Html,
+                ExportFormat::Markdown,
+            ] {
                 let rendered = render_report(&ok_data, fmt, &ReportOptions::default()).unwrap();
                 assert_r4_clean_for_format(&rendered, fmt).unwrap();
             }

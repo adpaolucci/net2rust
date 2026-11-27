@@ -22,8 +22,7 @@ use crate::transport::{
 use crate::whois::normalize_domain;
 
 pub const TOOL_ID: &str = "osint.hosting";
-pub const DESCRIPTION: &str =
-    "Aggregated WHOIS, DNS, ASN, web host, and mail provider profiler.";
+pub const DESCRIPTION: &str = "Aggregated WHOIS, DNS, ASN, web host, and mail provider profiler.";
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct DomainHostingProfile {

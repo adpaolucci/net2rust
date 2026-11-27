@@ -461,10 +461,10 @@ impl TableProvider for AppNetProvider {
                 }
                 #[cfg(not(windows))]
                 {
-                    return Err(
-                        NetError::NotSupported("live application network counter ETW requires Windows".to_string())
-                            .into(),
-                    );
+                    return Err(NetError::NotSupported(
+                        "live application network counter ETW requires Windows".to_string(),
+                    )
+                    .into());
                 }
             }
         };
@@ -983,10 +983,9 @@ impl TableProvider for AdapterMonitorProvider {
                 #[cfg(not(windows))]
                 {
                     let _ = (&self.start, &self.prev, std::mem::size_of::<RawAdapterRow>());
-                    return Err(NetError::NotSupported(
-                        "live network adapter monitor requires Windows".to_string(),
-                    )
-                    .into());
+                    return Err(
+                        NetError::NotSupported("live network adapter monitor requires Windows".to_string()).into(),
+                    );
                 }
             }
         };

@@ -1027,8 +1027,8 @@ mod tests {
 
     #[test]
     fn test_shares_and_openfiles_error_mappings() {
-        let shares = SmbShareProvider::new(NetContext::live())
-            .with_backend(Arc::new(MockSmbBackend { deny_open_files: false }));
+        let shares =
+            SmbShareProvider::new(NetContext::live()).with_backend(Arc::new(MockSmbBackend { deny_open_files: false }));
         let data = shares.query(&TableQuery::default()).unwrap();
         assert_eq!(data.total_rows, 1);
         assert_eq!(data.rows[0].cells[4], CellValue::Null); // level-1 fallback omits local_path

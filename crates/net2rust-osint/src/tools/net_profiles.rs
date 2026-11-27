@@ -10,8 +10,7 @@ use serde::{Deserialize, Serialize};
 use crate::model::{load_fixture_json, parse_guid_flexible};
 
 pub const TOOL_ID: &str = "osint.net-profiles";
-pub const DESCRIPTION: &str =
-    "Windows NetworkList profile inspector (mutating connect/disconnect gated).";
+pub const DESCRIPTION: &str = "Windows NetworkList profile inspector (mutating connect/disconnect gated).";
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct NetProfileRecord {

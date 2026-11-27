@@ -14,8 +14,7 @@ use crate::transport::{
 use crate::whois::{IpNetRecord, parse_rdap_ip, parse_whois_ip, rir_whois_query_string, select_rir_for_ip};
 
 pub const TOOL_ID: &str = "osint.ipnet";
-pub const DESCRIPTION: &str =
-    "RIR WHOIS (TCP 43) and RDAP IP block, org, and abuse contact lookup.";
+pub const DESCRIPTION: &str = "RIR WHOIS (TCP 43) and RDAP IP block, org, and abuse contact lookup.";
 
 pub fn schema() -> TableSchema {
     TableSchema::new(

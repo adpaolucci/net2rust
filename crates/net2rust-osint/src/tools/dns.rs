@@ -20,8 +20,7 @@ use crate::transport::{DnsTransport, MockDnsTransport, StdDnsTransport};
 use crate::whois::normalize_domain;
 
 pub const TOOL_ID: &str = "osint.dns";
-pub const DESCRIPTION: &str =
-    "Direct DNS A, AAAA, MX, NS, TXT, SOA, CNAME, PTR, SRV, CAA resolver.";
+pub const DESCRIPTION: &str = "Direct DNS A, AAAA, MX, NS, TXT, SOA, CNAME, PTR, SRV, CAA resolver.";
 pub const DEFAULT_DNS_SERVER: &str = "1.1.1.1:53";
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
