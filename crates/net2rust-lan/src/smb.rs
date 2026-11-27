@@ -13,8 +13,10 @@ use serde_json::{Value, json};
 use crate::common::reject_unknown_json_keys;
 use crate::fixtures;
 
+#[cfg(any(windows, test))]
 const MAX_WNET_BUF_BYTES: usize = 4 * 1024 * 1024;
 
+#[cfg(any(windows, test))]
 fn next_wnet_buf_u64s(current_u64s: usize, reported_bytes: usize) -> NetResult<usize> {
     let doubled_bytes = current_u64s.saturating_mul(8).saturating_mul(2);
     let needed_bytes = reported_bytes.max(doubled_bytes);
