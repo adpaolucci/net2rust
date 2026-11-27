@@ -57,7 +57,6 @@ pub fn actions(ctx: &NetContext) -> Vec<Arc<dyn ActionCommand>> {
 mod tests {
     use std::collections::BTreeSet;
     use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
-    use std::time::Duration;
 
     use chrono::{TimeZone, Utc};
     use guap_mcp::{ActionRiskLevel, JsonRpcError, McpServerRegistry, PolicyMode};
@@ -785,6 +784,7 @@ mod tests {
     #[test]
     fn test_windows_mib_struct_layouts_and_live_non_admin_graceful() {
         use std::mem::{offset_of, size_of};
+        use std::time::Duration;
         use windows::Win32::NetworkManagement::IpHelper::{
             MIB_TCP6ROW_OWNER_MODULE, MIB_TCP6TABLE_OWNER_MODULE, MIB_TCPROW_OWNER_MODULE, MIB_TCPTABLE_OWNER_MODULE,
             MIB_UDP6ROW_OWNER_MODULE, MIB_UDP6TABLE_OWNER_MODULE, MIB_UDPROW_OWNER_MODULE, MIB_UDPTABLE_OWNER_MODULE,
@@ -885,7 +885,7 @@ mod tests {
     #[test]
     fn test_windows_live_etw_flush_before_stop_delivers_events() {
         use std::net::{TcpListener, TcpStream, ToSocketAddrs};
-        use std::time::Instant;
+        use std::time::{Duration, Instant};
 
         // Obtain an unused ephemeral loopback port.
         let listener = TcpListener::bind("127.0.0.1:0").unwrap();
