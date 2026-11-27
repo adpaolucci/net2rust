@@ -8,6 +8,8 @@ use guap_table::{
     CellValue, ColumnDef, ColumnType, Row, SortDirection, TableData, TableError, TableProvider, TableQuery,
     TableSchema, apply_query,
 };
+#[cfg(not(windows))]
+use net2rust_core::NetError;
 use net2rust_core::{MacAddr, NetContext, NetResult};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
