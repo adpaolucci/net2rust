@@ -3,14 +3,14 @@
 Part of the **GUAP** Ecosystem (`guap.ca`) • [**Project Hub & Web Documentation: https://guap.ca/net2rust/**](https://guap.ca/net2rust/) • [**Project Wiki**](https://github.com/adpaolucci/net2rust/wiki)
 
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
-[![Rust: 2024](https://img.shields.io/badge/Rust-2024%20(1.88%2B)-orange.svg)](Cargo.toml)
+[![Rust: 2024](https://img.shields.io/badge/Rust-2024%20(1.89%2B)-orange.svg)](Cargo.toml)
 [![Workspace: 11 Crates](https://img.shields.io/badge/Workspace-11%20Crates-emerald.svg)](Cargo.toml)
 [![GUI: WinSafe Win32 + Iced 0.14](https://img.shields.io/badge/GUI-WinSafe%20Win32%20%2B%20Iced%200.14-cyan.svg)](crates/net2rust-win32)
 [![MCP: stdio JSON-RPC](https://img.shields.io/badge/MCP-stdio%20JSON--RPC%202.0-purple.svg)](crates/net2rust-mcp)
 
 Ready-to-submit **WinGet** & **Homebrew** manifests live in [`packaging/`](packaging/README.md).
 
-**`net2rust`** is a memory-safe, credential-free 55-tool network diagnostics, packet telemetry, LAN discovery, OSINT, and Wi-Fi/Bluetooth suite written in Rust (Edition 2024, MSRV `1.88`) on top of [`guap-kit`](https://github.com/adpaolucci/guap-kit):
+**`net2rust`** is a memory-safe, credential-free 55-tool network diagnostics, packet telemetry, LAN discovery, OSINT, and Wi-Fi/Bluetooth suite written in Rust (Edition 2024, MSRV `1.89`) on top of [`guap-kit`](https://github.com/adpaolucci/guap-kit):
 1. **`net2rust-win32`** (**WinSafe `0.0.29`**) — Native zero-GPU Win32 Common Controls console (`LVS_OWNERDATA` virtual grid, ComCtl v6, Per-Monitor DPI v2).
 2. **`net2rust-iced`** (**Iced `0.14`**) — Cross-platform retained-mode GUI (`wgpu` + `tiny-skia` CPU fallback).
 3. **`net2rust`** — Unified CLI exposing all 55 subcommands, `--offline` fixture/PCAP/PCAPNG/ETL playback, `GuapQuery` filter/sort, and `guap-export` Merkle custody reports.
